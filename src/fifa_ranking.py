@@ -1,9 +1,11 @@
 import json, asyncio, os
 import pandas as pd
 from datetime import datetime
+from dotenv import load_dotenv
 from pathlib import Path
 from playwright.async_api import async_playwright, Page, Response, TimeoutError as PlaywrightTimeout
 
+load_dotenv()
 
 class FIFARanking:
     RANKING_PAGE = os.getenv("RANKING_PAGE")
@@ -28,7 +30,7 @@ class FIFARanking:
                 btn = page.locator(sel).first
                 if await btn.is_visible(timeout=2000):
                     await btn.click()
-                    print("  ✅ Cookie banner dismissed")
+                    print("Cookie banner dismissed")
                     await page.wait_for_timeout(1500)
                     return
             except Exception:
@@ -228,15 +230,14 @@ class FIFARanking:
         for r in rows:
             try:
                 records.append({
-                    "rank_date":       dt.strftime("%Y-%m-%d"),
-                    "rank":            int(r["rank"]) if str(r["rank"]).isdigit() else None,
-                    "country_full":    r["country_full"],
-                    "country_code":    None,
-                    "total_points":    float(r["total_points"].replace(",", ""))
-                                       if r["total_points"] else None,
+                    "rank_date": dt.strftime("%Y-%m-%d"),
+                    "rank": int(r["rank"]) if str(r["rank"]).isdigit() else None,
+                    "country_full": r["country_full"],
+                    "country_code": None,
+                    "total_points": float(r["total_points"].replace(",", "")) if r["total_points"] else None,
                     "previous_points": None,
-                    "previous_rank":   None,
-                    "confederation":   "",
+                    "previous_rank": None,
+                    "confederation": "",
                 })
             except (ValueError, KeyError):
                 continue
@@ -288,8 +289,6 @@ class FIFARanking:
 
         return filtered
 
-    # ── Main entry point ──────────────────────────────────────────────────
-
     async def scrape(self,
         start_year: int = 2021,
         end_year: int = 2026,
@@ -324,8 +323,8 @@ class FIFARanking:
             # ── Step 2: Fetch each snapshot ──
             all_records = []
             for i, entry in enumerate(filtered):
-                sid      = entry.get("id") or entry.get("Id") or ""
-                text     = entry.get("text") or entry.get("Text") or sid
+                sid = entry.get("id") or entry.get("Id") or ""
+                text = entry.get("text") or entry.get("Text") or sid
 
                 print(f"  [{i+1}/{len(filtered)}] {text}...")
                 try:
@@ -339,10 +338,10 @@ class FIFARanking:
                         records = await self.scrape_from_dom(page, text)
 
                     all_records.extend(records)
-                    print(f"    ✅ {len(records)} teams captured")
+                    print(f"Success: {len(records)} teams captured")
 
                 except Exception as e:
-                    print(f"    ❌ Failed: {e}")
+                    print(f" Failed: {e}")
 
                 await asyncio.sleep(delay_seconds)
 

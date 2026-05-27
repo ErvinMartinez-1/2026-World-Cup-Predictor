@@ -5,6 +5,9 @@ from data.classes.abstract_base_class import BaseDataLayer
 from src.config import DATA_RAW, DATA_PROCESSED, TRAINING_START_DATE, TOURNAMENT_WEIGHTS
 
 class MatchLoader(BaseDataLayer):
+    def __init__(self, force_reload: bool = False):
+        super().__init__(force_reload)
+        
     @property
     def processed_path(self) -> Path:
         return DATA_PROCESSED / "matches_clean.parquet"

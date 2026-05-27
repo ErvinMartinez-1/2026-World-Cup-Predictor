@@ -1,5 +1,5 @@
 import asyncio
-from data.classes.fifa_ranking import FIFARanking
+from worldcup_predictor.src.fifa_ranking import FIFARanking
 
 scraper = FIFARanking()
 
