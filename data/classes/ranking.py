@@ -8,8 +8,7 @@ from src.config import DATA_RAW, DATA_PROCESSED, TEAM_NAME_MAP
 
 
 class Ranking(BaseDataLayer):
-    def __init__(self, force_reload: bool = False,
-                 start_year: int = 2021, end_year: int = 2026):
+    def __init__(self, force_reload: bool = False, start_year: int = 2021, end_year: int = 2026):
         super().__init__(force_reload)
         self.start_year = start_year
         self.end_year   = end_year
