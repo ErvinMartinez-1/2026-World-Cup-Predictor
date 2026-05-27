@@ -8,9 +8,9 @@ class WorldCupDataPipeline:
         self.fifa_rankings = None
     
     def load_all(self):
-        self.results = self._load_match_results()
-        self.elo_ratings = self._load_elo_ratings()
-        self.fifa_rankings = self._load_fifa_rankings()
+        self.results = self.load_match_results()
+        self.elo_ratings = self.load_elo_ratings()
+        self.fifa_rankings = self._oad_fifa_rankings()
         return self
     
     def load_match_results(self):
@@ -21,10 +21,9 @@ class WorldCupDataPipeline:
         return get_elo_ratings()  # from Layer 3 above
     
     def load_fifa_rankings(self):
-        return pd.read_csv('data/fifa_rankings.csv')  # Kaggle dataset
+        return pd.read_csv('data/fifa_rankings_scraped.csv')  # Kaggle dataset
     
     def get_team_features(self, team: str) -> dict:
-        """Pull all features for a single team"""
         team_matches = self.results[
             (self.results['home_team'] == team) | 
             (self.results['away_team'] == team)

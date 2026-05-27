@@ -1,5 +1,4 @@
-import json
-import asyncio
+import json, asyncio, os
 import pandas as pd
 from datetime import datetime
 from pathlib import Path
@@ -7,9 +6,8 @@ from playwright.async_api import async_playwright, Page, Response, TimeoutError 
 
 
 class FIFARanking:
-    RANKING_PAGE = "https://inside.fifa.com/fifa-world-ranking/men"
-    RANKINGS_API = "https://api.fifa.com/api/v3/fifarankings/rankings/rankingsbyschedule"
-
+    RANKING_PAGE = os.getenv("RANKING_PAGE")
+    RANKINGS_API = os.getenv("RANKINGS_API")
     async def goto(self, page: Page, url: str):
         """Navigate and dismiss the OneTrust cookie banner."""
         await page.goto(url, wait_until="domcontentloaded", timeout=45000)
@@ -82,14 +80,6 @@ class FIFARanking:
     async def fetch_rankings_for_schedule(
         self, schedule_id: str, page: Page
     ) -> list[dict]:
-        """
-        Calls the confirmed FIFA API endpoint directly.
-        Handles pagination via ContinuationToken.
-
-        Confirmed endpoint from diagnostic:
-          https://api.fifa.com/api/v3/fifarankings/rankings/rankingsbyschedule
-          ?rankingScheduleId=FRS_Male_Football_20260119&language=en
-        """
         all_results = []
         continuation_token = None
         page_num = 1
@@ -191,7 +181,7 @@ class FIFARanking:
 
         return records
 
-    # ── Fallback: scrape rendered DOM table ───────────────────────────────
+    #Fallback: scrape rendered DOM table
 
     async def scrape_from_dom(
         self, page: Page, date_str: str
