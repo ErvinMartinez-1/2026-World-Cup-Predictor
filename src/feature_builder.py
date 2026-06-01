@@ -37,10 +37,15 @@ class FeatureBuilder:
         print(f"  ELO:      {len(self.elo)} teams")
 
     def build_training_set(self, save_path: Optional[Path] = None) -> pd.DataFrame:
+        completed = self.matches[self.matches['home_score'].notna()].copy()
+        skipped_future = len(self.matches) - len(completed)
+        if skipped_future > 0:
+            print(f"  ℹ️  Skipped {skipped_future} future fixtures " f"(no score yet — use build_wc2026_fixtures() for these)")
+        
         print("\n[FeatureBuilder] Building training set...")
         rows = []
 
-        total = len(self.matches)
+        total = len(completed)
         skipped  = 0
 
         for i, match in self.matches.iterrows():
@@ -247,7 +252,7 @@ class FeatureBuilder:
             'wavg_goals_scored': self.safe_divide((past_matches['goals_scored'] * past_matches['weight']).sum(), total_weight),
             'wavg_goals_conceded': self.safe_divide((past_matches['goals_conceded'] * past_matches['weight']).sum(),total_weight),
 
-            'form_matches_available':  len(past_matches)
+            'form_matches_available': len(past_matches)
         }
 
     def build_h2h_features(self, team_a: str, team_b: str, as_of_date: pd.Timestamp, window: int = 10) -> dict:
