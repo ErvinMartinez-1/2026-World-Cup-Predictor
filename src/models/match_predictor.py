@@ -77,12 +77,6 @@ class MatchPredictor:
         # Train all models and evaluate on the validation set.
         self.feature_names_ = list(X_train.columns)
 
-        print("═" * 55)
-        print("  Phase 3: Model Training")
-        print("═" * 55)
-        print(f"  Train samples: {len(X_train):,}")
-        print(f"  Val samples:   {len(X_val):,}")
-        print(f"  Features:      {len(self.feature_names_)}\n")
 
         self.train_baseline(X_train, y_train, X_val, y_val)
 
@@ -96,7 +90,6 @@ class MatchPredictor:
         return self
 
     def train_baseline(self, X_train, y_train, X_val, y_val):
-        print("── Baseline: Logistic Regression ────────────────────")
         y_tr = y_train['result_encoded']
         y_vl = y_val['result_encoded']
 
@@ -106,9 +99,6 @@ class MatchPredictor:
         val_acc = accuracy_score(y_vl, self.baseline_classifier.predict(X_val))
         val_f1 = f1_score(y_vl, self.baseline_classifier.predict(X_val), average='weighted')
 
-        print(f"  Train accuracy: {train_acc:.4f}")
-        print(f"  Val accuracy:   {val_acc:.4f}")
-        print(f"  Val F1:         {val_f1:.4f}\n")
 
         self.train_metrics_['baseline_accuracy'] = train_acc
         self.val_metrics_['baseline_accuracy'] = val_acc
@@ -117,7 +107,6 @@ class MatchPredictor:
     def train_classifier(self, X_train, y_train, X_val, y_val):
         # Train XGBoost classifier with early stopping.
         # Early stopping: stops training when validation loss stops improving for 50 consecutive rounds. Prevents overfitting automatically andsaves training time.
-        print("── XGBoost Classifier ───────────────────────────────")
         y_tr = y_train['result_encoded']
         y_vl = y_val['result_encoded']
 
@@ -130,7 +119,6 @@ class MatchPredictor:
         tournament_weights = y_train['weight'] if 'weight' in y_train.columns else pd.Series(1.0, index=y_train.index)
         sample_weights = y_tr.map(class_weights) * tournament_weights.values
 
-        print(f"  Class weights: { {self.RESULT_ENCODING[k]: round(v,3) for k,v in class_weights.items()} }")
 
         # Train with early stopping on validation set
         self.classifier.fit(
@@ -156,17 +144,6 @@ class MatchPredictor:
 
         f1_per_class = f1_score(y_vl, val_pred, average=None)
 
-        print(f"\n  Train accuracy:   {train_acc:.4f}")
-        print(f"  Train log loss:   {train_loss:.4f}")
-        print(f"\n  Val accuracy:     {val_acc:.4f}  "
-              f"({'↑' if val_acc > self.val_metrics_['baseline_accuracy'] else '↓'} baseline)")
-        print(f"  Val F1 weighted:  {val_f1:.4f}")
-        print(f"  Val log loss:     {val_loss:.4f}")
-        print(f"  Val RPS:          {val_rps:.4f}  (lower is better)")
-        print(f"\n  Per-class F1:")
-        for i, f1 in enumerate(f1_per_class):
-            print(f"    {self.RESULT_ENCODING[i]:<12}: {f1:.4f}")
-
         self.train_metrics_.update({
             'xgb_accuracy': train_acc,
             'xgb_log_loss': train_loss,
@@ -179,7 +156,6 @@ class MatchPredictor:
         })
 
     def train_regressors(self, X_train, y_train, X_val, y_val):
-        print("\n── Poisson Goal Regressors ──────────────────────────")
 
         for target, model, label in [('home_score', self.home_goal_regressor, 'Home goals'), ('away_score', self.away_goal_regressor, 'Away goals')]:
             # Filter to completed matches only
@@ -197,11 +173,6 @@ class MatchPredictor:
             val_mae  = mean_absolute_error(y_vl, val_pred)
             val_rmse = np.sqrt(mean_squared_error(y_vl, val_pred))
 
-            print(f"\n  {label} ({len(y_tr):,} train / {len(y_vl):,} val matches):")
-            print(f"    Val MAE:       {val_mae:.4f} goals")
-            print(f"    Val RMSE:      {val_rmse:.4f} goals")
-            print(f"    Avg predicted: {val_pred.mean():.4f}")
-            print(f"    Avg actual:    {y_vl.mean():.4f}")
 
             self.val_metrics_[f'{target}_mae']  = val_mae
             self.val_metrics_[f'{target}_rmse'] = val_rmse
@@ -255,15 +226,6 @@ class MatchPredictor:
         rps = self.ranked_probability_score(y_true, pred_probs)
         f1_cls  = f1_score(y_true, pred_class, average=None)
 
-        print(f"\n── {label} Set Evaluation ─────────────────────────")
-        print(f"  Accuracy:        {acc:.4f}")
-        print(f"  F1 weighted:     {f1:.4f}")
-        print(f"  Log Loss:        {ll:.4f}")
-        print(f"  RPS:             {rps:.4f}  (lower is better)")
-        print(f"\n  Per-class F1:")
-        for i, score in enumerate(f1_cls):
-            print(f"    {self.RESULT_ENCODING[i]:<12}: {score:.4f}")
-
         # Goal evaluation, only on completed matches 
         for target, model in [('home_score', self.home_goal_regressor), ('away_score', self.away_goal_regressor)]:
             if target not in y_test.columns:
@@ -274,7 +236,6 @@ class MatchPredictor:
             valid_count = valid_mask.sum()
 
             if valid_count == 0:
-                print(f"\n  {target}: no completed matches in test set")
                 continue
 
             X_valid = X_test[valid_mask]
@@ -284,9 +245,6 @@ class MatchPredictor:
             mae = mean_absolute_error(y_valid, preds)
             rmse = np.sqrt(mean_squared_error(y_valid, preds))
 
-            print(f"\n  {target} ({valid_count} matches):")
-            print(f"    MAE:  {mae:.4f} goals")
-            print(f"    RMSE: {rmse:.4f} goals")
 
         return {
             'accuracy': acc, 'f1': f1,
@@ -309,7 +267,6 @@ class MatchPredictor:
             'val': self.val_metrics_,
         }
         joblib.dump(metrics, directory / "metrics.joblib")
-        print(f"\n[MatchPredictor] ✅ All models saved → {directory}")
 
     @classmethod
     def load(cls, directory: Path) -> "MatchPredictor":
@@ -328,7 +285,6 @@ class MatchPredictor:
         predictor.val_metrics_ = metrics['val']
         predictor.is_trained_  = True
 
-        print(f"[MatchPredictor] Loaded from {directory}")
         return predictor
 
     def ranked_probability_score(self, y_true:  pd.Series, y_probs: np.ndarray) -> float:
@@ -353,7 +309,6 @@ class MatchPredictor:
         return rps_sum / n
 
     def print_feature_importance(self, top_n: int = 15):
-        print(f"\n── Top {top_n} Most Important Features ──────────────")
         importance = pd.Series(
             self.classifier.feature_importances_,
             index=self.feature_names_
@@ -361,7 +316,6 @@ class MatchPredictor:
 
         for feat, score in importance.head(top_n).items():
             bar   = '█' * int(score * 200)
-            print(f"  {feat:<35} {score:.4f}  {bar}")
 
     def align_features(self, X: pd.DataFrame) -> pd.DataFrame:
         for col in self.feature_names_:

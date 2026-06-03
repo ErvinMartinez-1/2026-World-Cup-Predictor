@@ -75,7 +75,6 @@ class KnockoutSimulator:
             exp_away_goals = float(preds['predicted_away_goals'])
 
         except Exception as e:
-            print(f"  ⚠️  Knockout prediction failed {home_team} vs {away_team}: {e}")
             probs = {'home_win': 0.4, 'draw': 0.2, 'away_win': 0.4}
             exp_home_goals = exp_away_goals = 1.0
 

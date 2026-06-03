@@ -109,7 +109,6 @@ class GroupStageSimulator:
                 away_goals = round(exp_away_goals)
 
         except Exception as e:
-            print(f"  ⚠️  Prediction failed for {home_team} vs {away_team}: {e}")
             # Fallback: 0-0 draw
             home_goals, away_goals = 0, 0
             prob_home = prob_draw = prob_away = 1/3

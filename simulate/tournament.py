@@ -31,9 +31,6 @@ class TournamentSimulator:
         self.third_place  = ThirdPlaceQualifier()
 
     def predict(self) -> dict:
-        print("\n" + "═" * 55)
-        print("  WC 2026 Tournament Prediction")
-        print("═" * 55)
 
         return self.run_tournament(probabilistic=False)
 
@@ -42,9 +39,6 @@ class TournamentSimulator:
         Run N probabilistic tournament simulations and aggregate results into
         per-team stage-reach probabilities.
         """
-        print(f"\n{'═' * 55}")
-        print(f"  Monte Carlo Simulation ({n_simulations:,} runs)")
-        print(f"{'═' * 55}")
 
         win_counts = defaultdict(int)
         final_counts = defaultdict(int)
@@ -58,9 +52,6 @@ class TournamentSimulator:
         log_every = max(1, n_simulations // 10)
 
         for i in range(n_simulations):
-            if (i + 1) % log_every == 0:
-                print(f"  Simulation {i+1:,} / {n_simulations:,}...")
-
             try:
                 result = self.run_tournament(probabilistic=True)
 
@@ -85,16 +76,10 @@ class TournamentSimulator:
         if successful == 0:
             raise RuntimeError("All simulations failed — cannot build probability table.")
 
-        if failed > 0:
-            print(f"  ⚠️  {failed} simulation(s) failed and were skipped.")
-
         probs = self.build_probability_table(successful, win_counts, final_counts, semi_counts, quarter_counts, r16_counts, r32_counts)
 
-        print(f"\n  ✅ Monte Carlo complete ({successful:,} successful runs)")
-        print(f"\n  Top 10 tournament winners:")
         for _, row in probs.head(10).iterrows():
             bar = '█' * int(row['win_prob'] * 200)
-            print(f"    {row['team']:<25} {row['win_prob']*100:5.1f}%  {bar}")
 
         return {
             'n_simulations': successful,
@@ -308,7 +293,6 @@ class TournamentSimulator:
         with open(path, 'w', encoding='utf-8') as f:
             json.dump(output, f, indent=2, default=_default)
 
-        print(f"\n  Results saved to {path}")
         return output
 
     def generate_fixture_predictions(self) -> list[dict]:
@@ -367,8 +351,8 @@ class TournamentSimulator:
                         'actual_outcome': None,
                         'prediction_correct': None,
                     })
-                except Exception as e:
-                    print(f"  Fixture prediction failed {home_team} vs {away_team}: {e}")
+                except Exception:
+                    pass
 
         return results
 

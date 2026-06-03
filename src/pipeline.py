@@ -15,15 +15,7 @@ class PipelineStatus:
     errors: list = field(default_factory=list)
 
     def report(self):
-        print("\n── DataPipeline Load Report ─────────────────────")
-        print(f"  Matches:  {'✅' if self.matches  else '❌'}")
-        print(f"  Rankings: {'✅' if self.rankings else '❌'}")
-        print(f"  ELO:      {'✅' if self.elo      else '❌'}")
-        if self.errors:
-            print("\n  Errors:")
-            for e in self.errors:
-                print(f"    • {e}")
-        print("─────────────────────────────────────────────────\n")
+        pass
 
 
 class DataPipeline:
@@ -65,9 +57,6 @@ class DataPipeline:
         Load all layers. Failures are isolated — one layer failing
         does not prevent the others from loading.
         """
-        print("═" * 50)
-        print("DataPipeline starting...")
-        print("═" * 50)
 
         self.matches = self.load_layer("matches")
         self.rankings = self.load_layer("rankings")
@@ -133,7 +122,6 @@ class DataPipeline:
         except Exception as e:
             msg = f"{name}: {type(e).__name__}: {e}"
             self.status.errors.append(msg)
-            print(f"  ❌ [{name}] failed — {e}")
             return None
 
     def validate_names(self):
@@ -157,15 +145,7 @@ class DataPipeline:
             *loaded.values(), col='team'
         )
         if mismatches:
-            print(f"\n Warning: {len(mismatches)} team name mismatches found "
-                  f"across sources:")
-            for name in sorted(mismatches)[:20]:   # Show first 20
-                print(f"     '{name}'")
-            if len(mismatches) > 20:
-                print(f"     ... and {len(mismatches) - 20} more")
-            print(" Add entries to TEAM_NAME_MAP in config.py\n")
-        else:
-            print("Success: Team names consistent across all sources")
+            pass
 
     def require(self, layer: str):
         if getattr(self, layer) is None:

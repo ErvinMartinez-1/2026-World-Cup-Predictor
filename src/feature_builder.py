@@ -23,26 +23,12 @@ class FeatureBuilder:
         self.latest_ranking_date = self.rankings['rank_date'].max()
 
         if not self.has_ranking_history:
-            print("[FeatureBuilder] ⚠️  Single ranking snapshot detected "
-                f"({self.latest_ranking_date.date()})")
-            print("  → FIFA ranking features excluded from training set")
-            print("  → FIFA ranking features included for WC 2026 predictions")
-
+            pass
         self.team_match_view = self.build_team_match_view()
-
-        print(f"[FeatureBuilder] Initialised")
-        print(f"  Matches:  {len(self.matches):,} fixtures")
-        print(f"  Rankings: {self.rankings['rank_date'].nunique()} snapshot(s), "
-            f"{self.rankings['team'].nunique()} teams")
-        print(f"  ELO:      {len(self.elo)} teams")
 
     def build_training_set(self, save_path: Optional[Path] = None) -> pd.DataFrame:
         completed = self.matches[self.matches['home_score'].notna()].copy()
         skipped_future = len(self.matches) - len(completed)
-        if skipped_future > 0:
-            print(f"  ℹ️  Skipped {skipped_future} future fixtures " f"(no score yet — use build_wc2026_fixtures() for these)")
-        
-        print("\n[FeatureBuilder] Building training set...")
         rows = []
 
         total = len(completed)
@@ -89,20 +75,12 @@ class FeatureBuilder:
             }
             rows.append(row)
 
-            if (i + 1) % 500 == 0:
-                print(f"  Processed {i + 1:,} / {total:,} matches...")
-
         df = pd.DataFrame(rows).reset_index(drop=True)
 
-        print(f"\n  ✅ Training set built:")
-        print(f"     Rows:    {len(df):,}  (skipped {skipped} — insufficient history)")
-        print(f"     Columns: {len(df.columns)}")
-        print(f"     Date range: {df['date'].min().date()} → {df['date'].max().date()}")
 
         if save_path:
             Path(save_path).parent.mkdir(parents=True, exist_ok=True)
             df.to_parquet(save_path, index=False)
-            print(f"Saved → {save_path}")
 
         return df
 
@@ -119,7 +97,6 @@ class FeatureBuilder:
             if away_team == host_nation:
                 home_team, away_team = away_team, home_team
 
-            print(f" {host_nation} playing at home in {city}")
 
         
         match_date = pd.Timestamp(date)
@@ -153,7 +130,6 @@ class FeatureBuilder:
         }
 
     def build_wc2026_fixtures(self) -> pd.DataFrame:
-        print("\n[FeatureBuilder] Building WC 2026 group stage fixtures...")
         rows = []
 
         for group, teams in WC_2026_GROUPS.items():
@@ -183,15 +159,13 @@ class FeatureBuilder:
                     feats['group'] = group
                     feats['city'] = city or 'TBD'
                     rows.append(feats)
-                except ValueError as e:
-                    print(f"  ⚠️  Skipped {home_team} vs {away_team}: {e}")
+                except ValueError:
+                    pass
 
         df = pd.DataFrame(rows)
 
         # Summary of host nation advantages applied
         host_matches = df[df['neutral'] == 0]
-        print(f"  ✅ {len(df)} fixtures built")
-        print(f"  🏟️  {len(host_matches)} fixtures with host nation advantage")
 
         return df
 

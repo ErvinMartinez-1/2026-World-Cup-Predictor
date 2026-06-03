@@ -67,13 +67,11 @@ class DataPreprocessor:
             X: Feature DataFrame (scaled if scale=True)
             y: Target DataFrame with columns [result, home_score, away_score, goal_diff]
         """
-        print("[DataPreprocessor] Fitting and transforming training data...")
         df = df.copy()
  
         df = self.drop_cols(df)
  
         df, dropped = self.drop_insufficient_rows(df)
-        print(f"  Dropped {dropped} rows with insufficient form data")
  
         df = self.fit_impute(df)
  
@@ -83,9 +81,6 @@ class DataPreprocessor:
         X = self.select_feature_cols(X)
         self.feature_cols = list(X.columns)
  
-        print(f"  Features: {len(self.feature_cols)} columns")
-        print(f"  Samples:  {len(X):,} rows")
-        print(f"  Nulls remaining: {X.isnull().sum().sum()}")
  
         if scale:
             X = self.fit_scale(X)
@@ -129,7 +124,6 @@ class DataPreprocessor:
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump(self, path)
-        print(f"[DataPreprocessor] Saved → {path}")
  
     @classmethod
     def load(cls, path: Path) -> "DataPreprocessor":
@@ -243,7 +237,6 @@ class DataPreprocessor:
         for col in self.feature_cols:
             if col not in df.columns:
                 df[col] = 0
-                print(f"  ⚠️  Missing feature '{col}' filled with 0")
  
         return df[self.feature_cols]
  
