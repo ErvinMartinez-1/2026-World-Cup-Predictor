@@ -15,7 +15,7 @@ class DataPreprocessor:
  
     META_COLS = [
         'date', 'home_team', 'away_team',
-        'tournament', 'weight', 'neutral',
+        'tournament', 'weight'
     ]
  
     TARGET_COLS = [
@@ -196,6 +196,9 @@ class DataPreprocessor:
         for col, val in self.H2H_NEUTRAL_VALUES.items():
             if col in df.columns:
                 df[col] = df[col].fillna(val)
+            # Encode neutral as integer (True=1, False=0)
+        if 'neutral' in df.columns:
+            df['neutral'] = df['neutral'].astype(int)
  
         return df
  
@@ -211,6 +214,9 @@ class DataPreprocessor:
         for col, val in self.H2H_NEUTRAL_VALUES.items():
             if col in df.columns:
                 df[col] = df[col].fillna(val)
+                
+        if 'neutral' in df.columns:
+            df['neutral'] = df['neutral'].astype(int)
  
         return df
  

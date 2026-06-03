@@ -1,15 +1,10 @@
-import pandas as pd
+import joblib
 
-df = pd.read_parquet("data/processed/training_features.parquet")
-test_df = df[df['date'] >= '2026-01-01']
+preprocessor = joblib.load("data/processed/preprocessor.joblib")
+feature_names = joblib.load("data/processed/models/feature_names.joblib")
 
-print("Completed matches result distribution:")
-print(test_df[test_df['home_score'].notna()]['result'].value_counts())
+print("FIFA ranking features in model:")
+ranking_feats = [f for f in feature_names if 'fifa' in f or 'rank_diff' in f]
+print(ranking_feats if ranking_feats else "None — rankings not in trained model")
 
-print("\nFuture matches result distribution:")
-print(test_df[test_df['home_score'].isna()]['result'].value_counts())
-
-print("\nSample future matches:")
-print(test_df[test_df['home_score'].isna()][
-    ['date','home_team','away_team','result','home_score','away_score']
-].head(10).to_string())
+print(f"\nTotal features model expects: {len(feature_names)}")

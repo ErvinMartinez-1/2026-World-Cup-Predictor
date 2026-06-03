@@ -4,7 +4,7 @@ from pathlib import Path
 from itertools import combinations
 from typing import Optional
 
-from src.config import DATA_PROCESSED, WC_2026_GROUPS, TOURNAMENT_WEIGHTS
+from src.config import WC_2026_GROUPS, WC_2026_HOST_CITIES, FIXTURE_CITIES
 
 
 class FeatureBuilder:
@@ -106,11 +106,30 @@ class FeatureBuilder:
 
         return df
 
-    def build_fixture_features(self, home_team: str, away_team: str, date: str = "2026-06-11") -> dict:
+    def build_fixture_features(self, home_team: str, away_team: str, date: str = "2026-06-11", neutral: bool = True, city: str = None) -> dict:
+        host_nation =  None
+        if city and city in WC_2026_HOST_CITIES:
+            host_nation = WC_2026_HOST_CITIES[city]
+
+        # Only grant advantage if the host nation is actually playing
+        if host_nation in {home_team, away_team}:
+            neutral = False
+
+            # Ensure host nation is listed as home_team
+            if away_team == host_nation:
+                home_team, away_team = away_team, home_team
+
+            print(f" {host_nation} playing at home in {city}")
+
+        
         match_date = pd.Timestamp(date)
 
-        home_feats = self.build_team_features(home_team, match_date, force_ranking_inclusion=True)
-        away_feats = self.build_team_features(away_team, match_date, force_ranking_inclusion=True)
+        home_feats = self.build_team_features(
+            home_team, match_date, force_ranking_inclusion=True
+        )
+        away_feats = self.build_team_features(
+            away_team, match_date, force_ranking_inclusion=True
+        )
 
         if home_feats is None:
             raise ValueError(f"No features found for '{home_team}' as of {date}")
@@ -119,18 +138,18 @@ class FeatureBuilder:
 
         return {
             'date': match_date,
-            'home_team':  home_team,
-            'away_team':  away_team,
+            'home_team': home_team,
+            'away_team': away_team,
+            'neutral': int(neutral),   # ← pass as integer feature
             **{f'home_{k}': v for k, v in home_feats.items()},
             **{f'away_{k}': v for k, v in away_feats.items()},
             'elo_diff': home_feats.get('elo', np.nan) - away_feats.get('elo', np.nan),
             'rank_diff': home_feats.get('fifa_rank', np.nan) - away_feats.get('fifa_rank', np.nan),
             'points_diff': home_feats.get('fifa_points', np.nan) - away_feats.get('fifa_points', np.nan),
-            'form_diff': home_feats.get('form_points_per_game', np.nan)- away_feats.get('form_points_per_game', np.nan),
+            'form_diff': home_feats.get('form_points_per_game', np.nan) - away_feats.get('form_points_per_game', np.nan),
             'goals_scored_diff': home_feats.get('avg_goals_scored', np.nan) - away_feats.get('avg_goals_scored', np.nan),
             'goals_conceded_diff': home_feats.get('avg_goals_conceded', np.nan) - away_feats.get('avg_goals_conceded', np.nan),
-            
-            **self.build_h2h_features(home_team, away_team, match_date)
+            **self.build_h2h_features(home_team, away_team, match_date),
         }
 
     def build_wc2026_fixtures(self) -> pd.DataFrame:
@@ -138,16 +157,42 @@ class FeatureBuilder:
         rows = []
 
         for group, teams in WC_2026_GROUPS.items():
-            for home_team, away_team in combinations(teams, 2):
+            for team_a, team_b in combinations(teams, 2):
+
+                # Look up city — try both orderings
+                city = (FIXTURE_CITIES.get((team_a, team_b)) or
+                        FIXTURE_CITIES.get((team_b, team_a)))
+
+                # Assign home/away by ELO
+                elo_a = self.elo[self.elo['team'] == team_a]['elo'].values
+                elo_b = self.elo[self.elo['team'] == team_b]['elo'].values
+                elo_a = elo_a[0] if len(elo_a) > 0 else 0
+                elo_b = elo_b[0] if len(elo_b) > 0 else 0
+
+                home_team = team_a if elo_a >= elo_b else team_b
+                away_team = team_b if elo_a >= elo_b else team_a
+
                 try:
-                    feats = self.build_fixture_features(home_team, away_team, date="2026-06-11")
+                    feats = self.build_fixture_features(
+                        home_team=home_team,
+                        away_team=away_team,
+                        date="2026-06-11",
+                        neutral=True,       # default — overridden by city logic
+                        city=city,          # ← pass city, method handles the rest
+                    )
                     feats['group'] = group
+                    feats['city'] = city or 'TBD'
                     rows.append(feats)
                 except ValueError as e:
                     print(f"  ⚠️  Skipped {home_team} vs {away_team}: {e}")
 
         df = pd.DataFrame(rows)
-        print(f"  ✅ {len(df)} fixtures built across {len(WC_2026_GROUPS)} groups")
+
+        # Summary of host nation advantages applied
+        host_matches = df[df['neutral'] == 0]
+        print(f"  ✅ {len(df)} fixtures built")
+        print(f"  🏟️  {len(host_matches)} fixtures with host nation advantage")
+
         return df
 
     def build_team_features(self, team: str, as_of_date: pd.Timestamp, force_ranking_inclusion: bool = False) -> Optional[dict]:

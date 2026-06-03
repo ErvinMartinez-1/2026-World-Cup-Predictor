@@ -73,18 +73,44 @@ ELO_CODE_TO_NAME = {
 }
 
 WC_2026_GROUPS = {
-    'Group A': ['Mexico', 'South Korea', 'South Africa', 'Czech Republic'],
-    'Group B': ['Canada', 'Switzerland', 'Qatar', 'Bosnia and Herzegovina'],
-    'Group C': ['Spain', 'Japan', 'Panama', 'Algeria'],
+    'Group A': ['Mexico', 'South Africa', 'South Korea', 'Czech Republic'],
+    'Group B': ['Canada', 'Bosnia and Herzegovina', 'Qatar', 'Switzerland'],
+    'Group C': ['Brazil', 'Morocco', 'Haiti', 'Scotland'],
     'Group D': ['United States', 'Paraguay', 'Australia', 'Turkey'],
-    'Group E': ['Germany', 'Colombia', 'Egypt', 'Curaçao'],
-    'Group F': ['Portugal', 'Uruguay', 'Ivory Coast', 'Uzbekistan'],
-    'Group G': ['Belgium', 'Croatia', 'Morocco', 'Haiti'],
-    'Group H': ['France', 'Canada', 'Austria', 'New Zealand'],
-    'Group I': ['Argentina', 'Norway', 'Saudi Arabia', 'DR Congo'],
-    'Group J': ['Brazil', 'England', 'Tunisia', 'Ghana'],
-    'Group K': ['Netherlands', 'Senegal', 'Ecuador', 'Jordan'],
-    'Group L': ['Iran', 'Scotland', 'Cape Verde', 'Sweden'],
+    'Group E': ['Germany', 'Curaçao', 'Ivory Coast', 'Ecuador'],
+    'Group F': ['Netherlands', 'Japan', 'Tunisia', 'Sweden'],
+    'Group G': ['Belgium', 'Egypt', 'Iran', 'New Zealand'],
+    'Group H': ['Spain', 'Cape Verde', 'Saudi Arabia', 'Uruguay'],
+    'Group I': ['France', 'Senegal', 'Norway', 'Iraq'],
+    'Group J': ['Argentina', 'Algeria', 'Austria', 'Jordan'],
+    'Group K': ['Portugal', 'Uzbekistan', 'Colombia', 'DR Congo'],
+    'Group L': ['England', 'Croatia', 'Ghana', 'Panama']
+}
+
+WC_2026_HOST_NATIONS = {'United States', 'Mexico', 'Canada'}
+
+WC_2026_HOST_CITIES = {
+    # United States
+    'New York': 'United States',   
+    'Los Angeles': 'United States',   
+    'Dallas': 'United States',  
+    'San Francisco': 'United States',  
+    'Seattle': 'United States',   
+    'Boston': 'United States',   
+    'Miami': 'United States',  
+    'Atlanta': 'United States',   
+    'Kansas City': 'United States', 
+    'Houston': 'United States', 
+    'Philadelphia': 'United States', 
+
+    # Mexico
+    'Mexico City': 'Mexico',          
+    'Guadalajara': 'Mexico',         
+    'Monterrey': 'Mexico',          
+
+    # Canada
+    'Toronto': 'Canada',          
+    'Vancouver': 'Canada'     
 }
 
 WC_2026_TEAMS = {
@@ -145,3 +171,100 @@ ELO_MODEL_COLS = [
     'total_goals_scored', 
     'total_goals_conceded'
 ]
+
+FIXTURE_CITIES = {
+
+    # Group A 
+    ('Mexico', 'South Africa'): 'Mexico City',   
+    ('South Korea', 'Czech Republic'): 'Guadalajara',   
+    ('Mexico', 'South Korea'): 'Guadalajara',  
+    ('South Africa', 'South Korea'):'Monterrey',  
+
+    # Group B 
+    ('Canada', 'Bosnia and Herzegovina'):'Toronto',       
+    ('Qatar', 'Switzerland'): 'San Francisco', 
+    ('Switzerland', 'Bosnia and Herzegovina'): 'Los Angeles',
+    ('Canada', 'Qatar'): 'Vancouver', 
+    ('Switzerland', 'Canada'): 'Vancouver',    
+    ('Bosnia and Herzegovina', 'Qatar'): 'Seattle',
+
+    # Group C 
+    ('Brazil', 'Morocco'):'New York',     
+    ('Haiti', 'Scotland'): 'Boston',         
+    ('Scotland', 'Morocco'): 'Boston',     
+    ('Brazil', 'Haiti'): 'Philadelphia',
+    ('Scotland', 'Brazil'): 'Miami',
+    ('Morocco', 'Haiti'): 'Atlanta',
+
+    #  Group D 
+    ('United States', 'Paraguay'): 'Los Angeles',    
+    ('Australia', 'Turkey'): 'Vancouver',     
+    ('Turkey', 'Paraguay'): 'San Francisco', 
+    ('United States', 'Australia'): 'Seattle',      
+    ('Turkey', 'United States'): 'Los Angeles',   
+    ('Paraguay', 'Australia'): 'San Francisco', 
+
+    # Group E 
+    ('Germany', 'Curaçao'): 'Houston',     
+    ('Ivory Coast', 'Ecuador'): 'Philadelphia',
+    ('Germany', 'Ivory Coast'): 'Toronto',    
+    ('Ecuador', 'Curaçao'): 'Kansas City',
+    ('Ecuador', 'Germany'): 'New York',       
+    ('Curaçao', 'Ivory Coast'): 'Philadelphia',
+
+    # Group F
+    ('Netherlands', 'Japan'): 'Dallas',        
+    ('Sweden', 'Tunisia'): 'Monterrey',     
+    ('Netherlands', 'Sweden'): 'Houston',         
+    ('Tunisia', 'Japan'): 'Monterrey',     
+    ('Tunisia', 'Netherlands'): 'Dallas',         
+    ('Japan', 'Sweden'): 'Kansas City',
+
+    # Group G 
+    ('Belgium', 'Egypt'): 'Seattle',
+    ('Iran', 'New Zealand'): 'Los Angeles',
+    ('Belgium', 'Iran'): 'Atlanta',
+    ('New Zealand', 'Egypt'): 'Kansas City',
+    ('New Zealand', 'Belgium'): 'Miami',
+    ('Egypt', 'Iran'): 'Dallas',
+
+    # Group H 
+    ('Spain', 'Cape Verde'): 'Atlanta',
+    ('Saudi Arabia', 'Uruguay'): 'Miami',
+    ('Spain', 'Saudi Arabia'): 'Atlanta',
+    ('Uruguay', 'Cape Verde'): 'Houston',
+    ('Uruguay', 'Spain'): 'Guadalajara',   
+    ('Cape Verde', 'Saudi Arabia'): 'Dallas',
+
+    # Group I 
+    ('France', 'Senegal'): 'New York',      
+    ('Iraq', 'Norway'): 'Boston',
+    ('France', 'Iraq'): 'Philadelphia',
+    ('Norway', 'Senegal'): 'Boston',
+    ('Norway', 'France'): 'Boston',
+    ('Senegal', 'Iraq'): 'Philadelphia',
+
+    # Group J 
+    ('Argentina', 'Algeria'): 'Kansas City',
+    ('Austria', 'Jordan'): 'San Francisco',
+    ('Argentina', 'Austria'): 'Dallas',
+    ('Jordan', 'Algeria'): 'Dallas',
+    ('Jordan', 'Argentina'): 'Dallas',
+    ('Algeria', 'Austria'): 'Kansas City',
+
+    # Group K 
+    ('Portugal', 'DR Congo'): 'Houston',
+    ('Uzbekistan', 'Colombia'): 'Dallas',
+    ('Portugal', 'Uzbekistan'): 'Dallas',
+    ('Colombia', 'DR Congo'): 'Houston',
+    ('Colombia', 'Portugal'): 'Houston',
+    ('DR Congo', 'Uzbekistan'): 'Atlanta',
+
+    # Group L 
+    ('England', 'Croatia'): 'Dallas',
+    ('Ghana', 'Panama'): 'Atlanta',
+    ('England', 'Ghana'): 'Boston',
+    ('Panama', 'Croatia'): 'Miami',
+    ('Panama', 'England'): 'New York',      
+    ('Croatia', 'Ghana'):  'Miami'
+}
