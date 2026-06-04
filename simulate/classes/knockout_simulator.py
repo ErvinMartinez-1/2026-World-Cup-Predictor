@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from simulate.classes.knockout_resolver import KnockoutResolver, MatchStage
-
+from simulate.score_utils import get_most_likely_score
 class KnockoutSimulator:
     """
     Simulates all knockout rounds from Round of 32 through the Final.
@@ -92,8 +92,7 @@ class KnockoutSimulator:
             home_goals = np.random.poisson(max(exp_home_goals, 0.1))
             away_goals = np.random.poisson(max(exp_away_goals, 0.1))
         else:
-            home_goals = round(exp_home_goals)
-            away_goals = round(exp_away_goals)
+            home_goals, away_goals = get_most_likely_score(exp_home_goals, exp_away_goals, probs['home_win'], probs['draw'], probs['away_win'])
 
         # Adjust score to match resolved winner
         winner = resolution['winner']

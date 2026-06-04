@@ -6,6 +6,7 @@ from itertools import combinations
 from src.config import WC_2026_GROUPS
 from simulate.classes.match_result import MatchResult
 from simulate.classes.team_standing import TeamStanding
+from simulate.score_utils import get_most_likely_score
 
 class GroupStageSimulator:
     """
@@ -105,8 +106,7 @@ class GroupStageSimulator:
                 home_goals, away_goals = self.sample_scoreline(exp_home_goals, exp_away_goals, prob_home, prob_draw, prob_away)
             else:
                 # Use rounded expected goals (deterministic)
-                home_goals = round(exp_home_goals)
-                away_goals = round(exp_away_goals)
+                home_goals, away_goals = get_most_likely_score(exp_home_goals, exp_away_goals, prob_home, prob_draw, prob_away)
 
         except Exception as e:
             # Fallback: 0-0 draw
@@ -257,11 +257,11 @@ class ThirdPlaceQualifier:
             if len(group_standings) >= 3:
                 third = group_standings[2]
                 third_place.append({
-                    'team':        third.team,
-                    'group':       group,
-                    'points':      third.points,
-                    'goal_diff':   third.goal_diff,
-                    'goals_for':   third.goals_for,
+                    'team': third.team,
+                    'group': group,
+                    'points': third.points,
+                    'goal_diff': third.goal_diff,
+                    'goals_for': third.goals_for,
                 })
 
         # Sort all third-place teams
