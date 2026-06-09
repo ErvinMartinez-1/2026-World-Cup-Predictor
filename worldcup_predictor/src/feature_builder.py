@@ -4,7 +4,7 @@ from pathlib import Path
 from itertools import combinations
 from typing import Optional
 
-from src.config import WC_2026_GROUPS, WC_2026_HOST_CITIES, FIXTURE_CITIES
+from worldcup_predictor.src.config import WC_2026_GROUPS, WC_2026_HOST_CITIES, FIXTURE_CITIES
 
 
 class FeatureBuilder:
