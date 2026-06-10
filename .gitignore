@@ -1,15 +1,28 @@
+# --- Python ---
 .venv/
-.env*
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
 
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Environment / secrets ---
+.env*
+
+# --- Node / frontend ---
 node_modules/
 dist/
 dist-ssr/
 *.local
 
+# --- Logs ---
 logs/
 *.log
 npm-debug.log*
@@ -18,6 +31,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# --- AWS deployment ---
+# SAM build artifacts
+.aws-sam/
+# Staged copy of result JSONs made by scripts/deploy-api.ps1
+worldcup_predictor/api/data/
+
+# --- IDE / OS ---
 .vscode/*
 !.vscode/extensions.json
 .idea/
@@ -27,5 +47,4 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
-
 .claude/

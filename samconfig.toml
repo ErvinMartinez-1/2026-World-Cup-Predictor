@@ -1,0 +1,14 @@
+version = 0.1
+
+[default.build.parameters]
+# Required on Windows: builds inside the Lambda Python image so compiled
+# wheels (pydantic-core) are Linux binaries, not Windows ones.
+use_container = true
+
+[default.deploy.parameters]
+stack_name = "worldcup-predictor"
+region = "us-east-2"
+resolve_s3 = true
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+parameter_overrides = "AllowedOrigins=https://d2ys6sqftyll1d.cloudfront.net"

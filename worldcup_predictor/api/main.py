@@ -4,7 +4,7 @@ Run with:
 """
 
 import json
-import pandas as pd
+import os
 from pathlib import Path
 from typing import Optional
 from contextlib import asynccontextmanager
@@ -12,16 +12,18 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-ROOT  = Path(__file__).parent.parent
-RESULTS_PATH = ROOT / "data" / "results" / "simulation_output.json"
-FIXTURES_PATH = ROOT / "data" / "results" / "fixture_predictions.json"
-MODEL_DIR = ROOT / "data" / "processed" / "models"
-PREPROCESSOR_PATH = ROOT / "data" / "processed" / "preprocessor.joblib"
+# Data lives at ../data/results when running from the repo, and at
+# ./data/results when bundled for Lambda (/var/task). Repo layout is checked
+# first so a leftover staged copy never shadows live data locally.
+_HERE = Path(__file__).parent
+_CANDIDATES = [_HERE.parent / "data" / "results", _HERE / "data" / "results"]
+DATA_DIR = next((p for p in _CANDIDATES if p.exists()), _CANDIDATES[0])
+RESULTS_PATH = DATA_DIR / "simulation_output.json"
+FIXTURES_PATH = DATA_DIR / "fixture_predictions.json"
 
 cache: dict = {
     "simulation": None,
     "fixtures": None,
-    "simulator": None,
 }
 
 @asynccontextmanager
@@ -51,7 +53,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=os.environ.get("ALLOWED_ORIGINS", "*").split(","),
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -65,7 +67,6 @@ def get_status():
         "generated_at": sim.get("generated_at") if sim else None,
         "fixtures_loaded": cache["fixtures"] is not None,
         "n_fixtures": len(cache["fixtures"]) if cache["fixtures"] else 0,
-        "simulator_loaded": cache["simulator"] is not None,
     }
 
 @app.get("/api/bracket")
@@ -86,8 +87,8 @@ def get_fixtures(group: Optional[str] = None):
     Optional query param ?group=Group+A filters to a single group.
     actual_* fields are null until real results are recorded.
     """
-    with open(FIXTURES_PATH, encoding="utf-8") as f:
-        fixtures = json.load(f)
+    require_fixtures()
+    fixtures = cache["fixtures"]
     if group:
         fixtures = [f for f in fixtures if f["group"] == group]
     return {"fixtures": fixtures}
@@ -100,65 +101,6 @@ def get_fixture(fixture_id: str):
     if match is None:
         raise HTTPException(status_code=404, detail=f"Fixture '{fixture_id}' not found.")
     return match
-
-@app.post("/api/fixtures/{fixture_id}/predict")
-def repredict_fixture(fixture_id: str):
-
-    require_fixtures()
-
-    idx = next(
-        (i for i, f in enumerate(cache["fixtures"]) if f["id"] == fixture_id),
-        None,
-    )
-    if idx is None:
-        raise HTTPException(status_code=404, detail=f"Fixture '{fixture_id}' not found.")
-
-    fixture = cache["fixtures"][idx]
-    simulator = get_simulator()
-
-    try:
-        updated_preds = predict_one(simulator, fixture)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Prediction failed: {e}")
-
-    # Merge new prediction fields into the existing fixture, preserving actual_* fields
-    fixture.update(updated_preds)
-    cache["fixtures"][idx] = fixture
-
-    # Persist updated list to disk
-    with open(FIXTURES_PATH, "w", encoding="utf-8") as f:
-        json.dump(cache["fixtures"], f, indent=2)
-
-    return fixture
-
-def get_simulator():
-
-    if cache["simulator"] is not None:
-        return cache["simulator"]
-
-    import sys
-    sys.path.insert(0, str(ROOT))
-
-    from src.pipeline import DataPipeline
-    from src.feature_builder import FeatureBuilder
-    from src.data_preprocessor import DataPreprocessor
-    from src.models.match_predictor import MatchPredictor
-    from worldcup_predictor.simulate.tournament import TournamentSimulator
-
-    print("[API] Loading pipeline and model (first use)...")
-    pipeline = DataPipeline().run()
-    fb = FeatureBuilder(matches=pipeline.matches, rankings=pipeline.rankings, elo=pipeline.elo)
-    predictor = MatchPredictor.load(MODEL_DIR)
-    preprocessor = DataPreprocessor.load(PREPROCESSOR_PATH)
-
-    simulator = TournamentSimulator(
-        predictor=predictor,
-        feature_builder=fb,
-        preprocessor=preprocessor,
-    )
-    cache["simulator"] = simulator
-    print("[API] Simulator ready.")
-    return simulator
 
 def require_simulation():
     if cache["simulation"] is None:
@@ -173,29 +115,6 @@ def require_fixtures():
             status_code=503,
             detail="No fixture data available. Generate it by running generate_fixture_predictions().",
         )
-
-def predict_one(simulator, fixture: dict) -> dict:
-    """Re-run the model for a single fixture dict and return updated prediction fields."""
-    features = simulator.feature_builder.build_fixture_features(
-        home_team=fixture["home_team"],
-        away_team=fixture["away_team"],
-        date=fixture["date"],
-        neutral=True,
-        city=fixture.get("city"),
-    )
-    X = pd.DataFrame([features])
-    X, _ = simulator.preprocessor.transform(X, scale=True)
-    preds = simulator.predictor.predict(X).iloc[0]
-
-    return {
-        "home_win_prob": round(float(preds["prob_home_win"]), 4),
-        "draw_prob": round(float(preds["prob_draw"]), 4),
-        "away_win_prob": round(float(preds["prob_away_win"]), 4),
-        "predicted_outcome": str(preds["predicted_result"]),
-        "predicted_home_goals": round(float(preds["predicted_home_goals"]), 2),
-        "predicted_away_goals": round(float(preds["predicted_away_goals"]), 2),
-        "predicted_score": str(preds["predicted_score"]),
-    }
 
 from mangum import Mangum
 handler = Mangum(app)

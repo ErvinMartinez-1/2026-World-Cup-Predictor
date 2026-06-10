@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: WC 2026 Predictor - API (Lambda + HTTP API) and UI (S3 + CloudFront)
+
+Parameters:
+  AllowedOrigins:
+    Type: String
+    Default: "*"
+    Description: >-
+      Comma-separated list of origins allowed by the API's CORS middleware.
+      Tighten to https://<cloudfront-domain> after the first deploy.
+
+Resources:
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: worldcup_predictor/api/
+      Handler: main.handler
+      Runtime: python3.11
+      Architectures: [x86_64]
+      MemorySize: 512
+      Timeout: 15
+      Environment:
+        Variables:
+          ALLOWED_ORIGINS: !Ref AllowedOrigins
+      Events:
+        ApiProxy:
+          Type: HttpApi
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub "${FrontendBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution}"
+
+  OAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "${AWS::StackName}-oac"
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+        HttpVersion: http2
+        PriceClass: PriceClass_100
+        Origins:
+          - Id: s3-frontend
+            DomainName: !GetAtt FrontendBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt OAC.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        DefaultCacheBehavior:
+          TargetOriginId: s3-frontend
+          ViewerProtocolPolicy: redirect-to-https
+          # Managed policy: CachingOptimized
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+        # SPA fallback: with OAC (no ListBucket) S3 returns 403 for missing
+        # keys, so route both 403 and 404 to index.html for React Router.
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+
+Outputs:
+  ApiUrl:
+    Description: Base URL for the API (use as VITE_API_BASE_URL)
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  CloudFrontUrl:
+    Description: Public URL of the UI
+    Value: !Sub "https://${Distribution.DomainName}"
+  FrontendBucketName:
+    Description: Bucket the frontend build is synced to
+    Value: !Ref FrontendBucket
+  DistributionId:
+    Description: CloudFront distribution ID (for cache invalidations)
+    Value: !Ref Distribution
