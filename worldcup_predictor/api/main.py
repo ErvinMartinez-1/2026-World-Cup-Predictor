@@ -86,8 +86,8 @@ def get_fixtures(group: Optional[str] = None):
     Optional query param ?group=Group+A filters to a single group.
     actual_* fields are null until real results are recorded.
     """
-    require_fixtures()
-    fixtures = cache["fixtures"]
+    with open(FIXTURES_PATH, encoding="utf-8") as f:
+        fixtures = json.load(f)
     if group:
         fixtures = [f for f in fixtures if f["group"] == group]
     return {"fixtures": fixtures}

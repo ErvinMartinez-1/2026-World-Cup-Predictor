@@ -3,6 +3,8 @@ import { useApiData } from "../hooks/useApiData";
 import GroupStageView from "./GroupStageView";
 import KnockoutBracket from "./KnockoutBracket";
 import TeamProbBar from "./TeamProbBar";
+import BackgroundPattern from "./ui/background-pattern";
+import { AnimatedBorderButton } from "./ui/AnimatedBorderButton";
 
 const TABS = [
   { id: "predicted", label: "Predicted Bracket", color: "blue" },
@@ -33,6 +35,14 @@ const COLOR_MAP = {
   },
 };
 
+// Hex values matching the wc-* Tailwind colors for the animated glow
+const GLOW_HEX = {
+  blue:  "#2A398D",
+  red:   "#E61D25",
+  green: "#3CAC3B",
+  dark:  "#474A4A",
+};
+
 export default function PredictionsPage() {
   const [activeTab, setActiveTab] = useState("predicted");
   const [activeView, setActiveView] = useState("knockout");
@@ -45,71 +55,80 @@ export default function PredictionsPage() {
   const loading = bracketLoading || fixturesLoading;
 
   return (
-    <div className="min-h-screen bg-[#F7F6F3] pt-16">
-      {/* Page header */}
-      <div className="bg-[#EDECE9] border-b border-gray-200 px-4 md:px-6 py-4 md:py-5">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">
-            World Cup 2026 · Predictions
-          </h1>
-          <p className="text-gray-500 text-sm">
-            {isActual
-              ? "Real match results — updated as the tournament progresses"
-              : "Model predictions based on XGBoost + Poisson simulation"}
-          </p>
-        </div>
-      </div>
-
-      {/* Tab bar */}
+    <div className="relative min-h-screen bg-[#F7F6F3] pt-16">
+      <BackgroundPattern />
+      <div className="relative z-10">
+      {/* Tab bar — title sits above the left tab buttons */}
       <div className="sticky top-16 z-40 bg-[#F7F6F3]/95 backdrop-blur-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-wrap items-center justify-between gap-2 py-2 md:py-0">
-          <div className="flex gap-2">
-            {TABS.map((tab) => {
-              const c = COLOR_MAP[tab.color];
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  data-testid={`tab-${tab.id}`}
-                  className={`px-3 py-2 text-xs sm:px-5 sm:py-2.5 sm:text-sm font-semibold rounded-lg border-2 transition-all duration-200 hover:scale-[1.03] hover:shadow-md active:scale-95 ${
-                    isActive ? c.active : `bg-transparent ${c.idle}`
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
+        <div className="w-full px-4 md:px-6 flex flex-wrap items-end justify-between gap-3 py-3">
+
+          {/* Left: title + subtitle + tab buttons stacked */}
+          <div className="flex flex-col gap-2">
+            <div>
+              <h1 className="text-xl font-bold text-gray-900 leading-tight">
+                World Cup 2026 · Predictions
+              </h1>
+              <p className="text-gray-500 text-xs mt-0.5">
+                {isActual
+                  ? "Real match results — updated as the tournament progresses"
+                  : "Model predictions based on XGBoost + Poisson simulation"}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              {TABS.map((tab) => {
+                const c = COLOR_MAP[tab.color];
+                const isActive = activeTab === tab.id;
+                return (
+                  <AnimatedBorderButton
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    data-testid={`tab-${tab.id}`}
+                    glowColor={isActive ? "#ffffff" : GLOW_HEX[tab.color]}
+                    duration={4}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-md border-2 transition-all duration-200 hover:scale-[1.03] hover:shadow-md active:scale-95 ${
+                      isActive ? c.active : `bg-transparent ${c.idle}`
+                    }`}
+                  >
+                    {tab.label}
+                  </AnimatedBorderButton>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Right: view toggle buttons */}
           <div className="flex gap-2">
             {VIEWS.map((v) => {
               const c = COLOR_MAP[v.color];
               const isActive = activeView === v.id;
               return (
-                <button
+                <AnimatedBorderButton
                   key={v.id}
                   onClick={() => setActiveView(v.id)}
+                  glowColor={isActive ? "#ffffff" : GLOW_HEX[v.color]}
+                  duration={4}
                   className={`px-3 py-1.5 text-xs font-semibold rounded-md border-2 transition-all duration-200 hover:scale-[1.03] hover:shadow-md active:scale-95 ${
                     isActive ? c.active : `bg-transparent ${c.idle}`
                   }`}
                 >
                   {v.label}
-                </button>
+                </AnimatedBorderButton>
               );
             })}
           </div>
+
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+      <div className="w-full px-4 md:px-6 py-8">
         {loading ? (
           <div className="text-center py-20">
             <div className="text-4xl mb-4 animate-spin">⚽</div>
             <p className="text-gray-400">Loading predictions…</p>
           </div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row gap-20">
             {/* Main bracket area */}
             <div className="flex-1 min-w-0">
               {activeView === "group" ? (
@@ -123,9 +142,9 @@ export default function PredictionsPage() {
               )}
             </div>
 
-            {/* Sidebar: MC probabilities (predicted tab only) */}
-            {!isActual && mcData && (
-              <div className="lg:w-72 xl:w-80 flex-shrink-0">
+            {/* Sidebar: MC probabilities (knockout + predicted tab only) */}
+            {activeView === "knockout" && !isActual && mcData && (
+              <div className="lg:w-[440px] xl:w-[520px] flex-shrink-0">
                 <div className="bg-white rounded-xl border border-gray-200 p-5 sticky top-32 shadow-sm">
                   <h3 className="text-gray-900 font-bold text-sm mb-1">
                     Championship Odds
@@ -133,29 +152,15 @@ export default function PredictionsPage() {
                   <p className="text-gray-400 text-xs mb-4">
                     Based on {mcData.n_simulations?.toLocaleString()} simulations
                   </p>
-                  <TeamProbBar teams={mcData.teams} limit={12} />
+                  <TeamProbBar teams={mcData.teams} />
                 </div>
               </div>
             )}
 
-            {/* Actual tab note */}
-            {isActual && (
-              <div className="lg:w-72 xl:w-80 flex-shrink-0">
-                <div className="bg-white rounded-xl border border-gray-200 p-5 sticky top-32 text-center shadow-sm">
-                  <span className="text-4xl block mb-3">📅</span>
-                  <p className="text-gray-900 font-semibold text-sm mb-2">
-                    Tournament begins June 11
-                  </p>
-                  <p className="text-gray-400 text-xs leading-relaxed">
-                    Real results will populate as matches are played. Predictions
-                    without results show "Not played yet".
-                  </p>
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>
+      </div>{/* end relative z-10 */}
     </div>
   );
 }
