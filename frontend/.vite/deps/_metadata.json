@@ -1,0 +1,86 @@
+{
+  "hash": "94812442",
+  "configHash": "ebf8fefa",
+  "lockfileHash": "246f519d",
+  "browserHash": "274ff334",
+  "optimized": {
+    "@splinetool/react-spline": {
+      "src": "../../node_modules/@splinetool/react-spline/dist/react-spline.js",
+      "file": "@splinetool_react-spline.js",
+      "fileHash": "db621783",
+      "needsInterop": false
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "9f810416",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "5af89f1d",
+      "needsInterop": false
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "4c08f91b",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "a403e098",
+      "needsInterop": true
+    },
+    "tailwind-merge": {
+      "src": "../../node_modules/tailwind-merge/dist/bundle-mjs.mjs",
+      "file": "tailwind-merge.js",
+      "fileHash": "1a8140f6",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "boolean-2tdi7GRp": {
+      "file": "boolean-2tdi7GRp.js",
+      "isDynamicEntry": true
+    },
+    "gaussian-splat-compression-J6QpzOFJ": {
+      "file": "gaussian-splat-compression-J6QpzOFJ.js",
+      "isDynamicEntry": true
+    },
+    "howler-BSMZNC60": {
+      "file": "howler-BSMZNC60.js",
+      "isDynamicEntry": true
+    },
+    "navmesh-Db-1hR6k": {
+      "file": "navmesh-Db-1hR6k.js",
+      "isDynamicEntry": true
+    },
+    "opentype-DRu5Hcwo": {
+      "file": "opentype-DRu5Hcwo.js",
+      "isDynamicEntry": true
+    },
+    "physics-DMrwtQ1B": {
+      "file": "physics-DMrwtQ1B.js",
+      "isDynamicEntry": true
+    },
+    "process-Cvdq12_3": {
+      "file": "process-Cvdq12_3.js",
+      "isDynamicEntry": true
+    },
+    "react-Ea1HnpA1": {
+      "file": "react-Ea1HnpA1.js",
+      "isDynamicEntry": false
+    },
+    "react-dom-BiNnG8uc": {
+      "file": "react-dom-BiNnG8uc.js",
+      "isDynamicEntry": false
+    },
+    "ui-CDcGFqaq": {
+      "file": "ui-CDcGFqaq.js",
+      "isDynamicEntry": true
+    }
+  }
+}

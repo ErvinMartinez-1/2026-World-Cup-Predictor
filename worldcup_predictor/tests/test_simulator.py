@@ -13,7 +13,7 @@ from src.pipeline import DataPipeline
 from src.feature_builder import FeatureBuilder
 from src.data_preprocessor import DataPreprocessor
 from src.models.match_predictor import MatchPredictor
-from simulate.tournament import TournamentSimulator
+from worldcup_predictor.simulate.tournament import TournamentSimulator
 
 
 def print_team_path(team: str, prediction: dict) -> None:

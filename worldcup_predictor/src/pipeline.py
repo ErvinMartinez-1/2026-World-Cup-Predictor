@@ -2,10 +2,10 @@ import pandas as pd
 from dataclasses import dataclass, field
 from typing import Optional
 
-from data.classes.load_match import MatchLoader
-from data.classes.ranking import Ranking
-from data.classes.elo import EloLoader
-from data.classes.normalize_country_name import TeamNameNormalizer
+from worldcup_predictor.data.classes.load_match import MatchLoader
+from worldcup_predictor.data.classes.ranking import Ranking
+from worldcup_predictor.data.classes.elo import EloLoader
+from worldcup_predictor.data.classes.normalize_country_name import TeamNameNormalizer
 
 @dataclass
 class PipelineStatus:
