@@ -9,14 +9,24 @@ $bucket = aws cloudformation describe-stacks --stack-name $stack --query "Stacks
 $distId = aws cloudformation describe-stacks --stack-name $stack --query "Stacks[0].Outputs[?OutputKey=='DistributionId'].OutputValue" --output text
 if (-not $bucket -or -not $distId) { throw "Could not read stack outputs - is the '$stack' stack deployed?" }
 
-Push-Location "$root\frontend"
+# In CI the gitignored .env.production is absent, so derive VITE_API_BASE_URL
+# from the stack's ApiUrl output (also keeps the committed value from drifting).
+$envFile = Join-Path $root 'frontend/.env.production'
+if ($env:CI -or -not (Test-Path $envFile)) {
+    $apiUrl = aws cloudformation describe-stacks --stack-name $stack --query "Stacks[0].Outputs[?OutputKey=='ApiUrl'].OutputValue" --output text
+    if (-not $apiUrl) { throw "Could not read ApiUrl output from the '$stack' stack." }
+    "VITE_API_BASE_URL=$apiUrl" | Set-Content $envFile
+}
+
+Push-Location (Join-Path $root 'frontend')
 npm run build
 if ($LASTEXITCODE -ne 0) { Pop-Location; exit $LASTEXITCODE }
 Pop-Location
 
+$dist = Join-Path $root 'frontend/dist'
 # Hashed Vite assets: cache forever. index.html: never cache (prevents stale SPA).
-aws s3 sync "$root\frontend\dist" "s3://$bucket" --delete --cache-control "public,max-age=31536000,immutable" --exclude "index.html"
-aws s3 cp "$root\frontend\dist\index.html" "s3://$bucket/index.html" --cache-control "no-cache"
+aws s3 sync $dist "s3://$bucket" --delete --cache-control "public,max-age=31536000,immutable" --exclude "index.html"
+aws s3 cp (Join-Path $dist 'index.html') "s3://$bucket/index.html" --cache-control "no-cache"
 aws cloudfront create-invalidation --distribution-id $distId --paths "/index.html" "/"
 
 Write-Host "Frontend deployed. URL:"
