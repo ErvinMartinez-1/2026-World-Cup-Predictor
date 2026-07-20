@@ -51,6 +51,7 @@ export default function PredictionsPage() {
   const { data: bracketData,  loading: bracketLoading }  = useApiData("/api/bracket");
   const { data: fixturesData, loading: fixturesLoading } = useApiData("/api/fixtures");
   const { data: mcData }                                  = useApiData("/api/monte-carlo");
+  const { data: actualData }                              = useApiData("/api/actual-results");
 
   const loading = bracketLoading || fixturesLoading;
 
@@ -135,10 +136,11 @@ export default function PredictionsPage() {
                 <GroupStageView
                   bracketData={bracketData}
                   fixturesData={fixturesData}
+                  actualData={actualData}
                   isActual={isActual}
                 />
               ) : (
-                <KnockoutBracket data={bracketData} isActual={isActual} />
+                <KnockoutBracket data={bracketData} actualData={actualData} isActual={isActual} />
               )}
             </div>
 

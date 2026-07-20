@@ -17,98 +17,16 @@ const GROUPS = [
   ["Group L", ["England", "Croatia", "Ghana", "Panama"]],
 ];
 
-// ─── Actual Results ──────────────────────────────────────────────────────────
-// Set null → { home: N, away: N } as each match is played.
-// IDs match the fixture IDs in fixture_predictions.json exactly.
-const ACTUAL_SCORES = {
-  // Group A
-  "group_a_mexico_vs_south_africa":          null,
-  "group_a_mexico_vs_south_korea":           null,
-  "group_a_mexico_vs_czech_republic":        null,
-  "group_a_south_korea_vs_south_africa":     null,
-  "group_a_czech_republic_vs_south_africa":  null,
-  "group_a_south_korea_vs_czech_republic":   null,
-  // Group B
-  "group_b_canada_vs_bosnia_and_herzegovina":     null,
-  "group_b_canada_vs_qatar":                      null,
-  "group_b_switzerland_vs_canada":                null,
-  "group_b_bosnia_and_herzegovina_vs_qatar":      null,
-  "group_b_switzerland_vs_bosnia_and_herzegovina": null,
-  "group_b_switzerland_vs_qatar":                 null,
-  // Group C
-  "group_c_brazil_vs_morocco":   null,
-  "group_c_brazil_vs_haiti":     null,
-  "group_c_brazil_vs_scotland":  null,
-  "group_c_morocco_vs_haiti":    null,
-  "group_c_morocco_vs_scotland": null,
-  "group_c_haiti_vs_scotland":   null,
-  // Group D
-  "group_d_paraguay_vs_united_states": null,
-  "group_d_australia_vs_united_states": null,
-  "group_d_turkey_vs_united_states":   null,
-  "group_d_paraguay_vs_australia":     null,
-  "group_d_turkey_vs_paraguay":        null,
-  "group_d_turkey_vs_australia":       null,
-  // Group E
-  "group_e_germany_vs_curaçao":      null,
-  "group_e_germany_vs_ivory_coast":  null,
-  "group_e_ecuador_vs_germany":      null,
-  "group_e_ivory_coast_vs_curaçao":  null,
-  "group_e_ecuador_vs_curaçao":      null,
-  "group_e_ecuador_vs_ivory_coast":  null,
-  // Group F
-  "group_f_netherlands_vs_japan":    null,
-  "group_f_netherlands_vs_tunisia":  null,
-  "group_f_netherlands_vs_sweden":   null,
-  "group_f_japan_vs_tunisia":        null,
-  "group_f_japan_vs_sweden":         null,
-  "group_f_sweden_vs_tunisia":       null,
-  // Group G
-  "group_g_belgium_vs_egypt":       null,
-  "group_g_belgium_vs_iran":        null,
-  "group_g_belgium_vs_new_zealand": null,
-  "group_g_iran_vs_egypt":          null,
-  "group_g_egypt_vs_new_zealand":   null,
-  "group_g_iran_vs_new_zealand":    null,
-  // Group H
-  "group_h_spain_vs_cape_verde":      null,
-  "group_h_spain_vs_saudi_arabia":    null,
-  "group_h_spain_vs_uruguay":         null,
-  "group_h_saudi_arabia_vs_cape_verde": null,
-  "group_h_uruguay_vs_cape_verde":    null,
-  "group_h_uruguay_vs_saudi_arabia":  null,
-  // Group I
-  "group_i_france_vs_senegal": null,
-  "group_i_france_vs_norway":  null,
-  "group_i_france_vs_iraq":    null,
-  "group_i_norway_vs_senegal": null,
-  "group_i_senegal_vs_iraq":   null,
-  "group_i_norway_vs_iraq":    null,
-  // Group J
-  "group_j_argentina_vs_algeria": null,
-  "group_j_argentina_vs_austria": null,
-  "group_j_argentina_vs_jordan":  null,
-  "group_j_austria_vs_algeria":   null,
-  "group_j_algeria_vs_jordan":    null,
-  "group_j_austria_vs_jordan":    null,
-  // Group K
-  "group_k_portugal_vs_uzbekistan": null,
-  "group_k_portugal_vs_colombia":   null,
-  "group_k_portugal_vs_dr_congo":   null,
-  "group_k_colombia_vs_uzbekistan": null,
-  "group_k_uzbekistan_vs_dr_congo": null,
-  "group_k_colombia_vs_dr_congo":   null,
-  // Group L
-  "group_l_england_vs_croatia": null,
-  "group_l_england_vs_ghana":   null,
-  "group_l_england_vs_panama":  null,
-  "group_l_croatia_vs_ghana":   null,
-  "group_l_croatia_vs_panama":  null,
-  "group_l_panama_vs_ghana":    null,
-};
-// ─────────────────────────────────────────────────────────────────────────────
+// Real scores come from /api/actual-results (data/results/actual_results.json),
+// keyed by the same fixture IDs as /api/fixtures and already oriented to each
+// fixture's own home_team/away_team. Returns { home, away } or null if unplayed.
+function actualScoreFor(actualData, fixtureId) {
+  const m = actualData?.group_stage?.[fixtureId];
+  if (!m || m.home_goals == null || m.away_goals == null) return null;
+  return { home: m.home_goals, away: m.away_goals };
+}
 
-function computeActualStandings(teams, groupFixtures) {
+function computeActualStandings(teams, groupFixtures, actualData) {
   const stats = Object.fromEntries(
     teams.map((t) => [
       t,
@@ -117,7 +35,7 @@ function computeActualStandings(teams, groupFixtures) {
   );
 
   groupFixtures.forEach((f) => {
-    const s = ACTUAL_SCORES[f.id];
+    const s = actualScoreFor(actualData, f.id);
     if (!s) return;
     const { home: hg, away: ag } = s;
     const ht = f.home_team;
@@ -147,17 +65,18 @@ function computeActualStandings(teams, groupFixtures) {
   );
 }
 
-function SingleGroupCard({ groupName, teams, standings, fixtures, isActual }) {
+function SingleGroupCard({ groupName, teams, standings, fixtures, actualData, isActual }) {
   const [showMatches, setShowMatches] = useState(false);
   const groupFixtures = fixtures
     .filter((f) => f.group === groupName)
     .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
 
   const activeStandings = isActual
-    ? computeActualStandings(teams, groupFixtures)
+    ? computeActualStandings(teams, groupFixtures, actualData)
     : standings;
 
-  const noScoresEntered = isActual && !groupFixtures.some((f) => ACTUAL_SCORES[f.id] != null);
+  const noScoresEntered =
+    isActual && !groupFixtures.some((f) => actualScoreFor(actualData, f.id) != null);
 
   const teamsToRender = activeStandings.length > 0 ? activeStandings.map((s) => s.team) : teams;
   const top2 = new Set(activeStandings.slice(0, 2).map((s) => s.team));
@@ -264,7 +183,7 @@ function SingleGroupCard({ groupName, teams, standings, fixtures, isActual }) {
                 key={f.id}
                 fixture={f}
                 isActual={isActual}
-                actualScore={isActual ? (ACTUAL_SCORES[f.id] ?? null) : undefined}
+                actualScore={isActual ? actualScoreFor(actualData, f.id) : undefined}
               />
             ))}
           </div>
@@ -288,7 +207,7 @@ function GroupCardsSkeleton() {
   );
 }
 
-export default function GroupCards({ bracketData, fixturesData, isActual }) {
+export default function GroupCards({ bracketData, fixturesData, actualData, isActual }) {
   if (!bracketData || !fixturesData) return <GroupCardsSkeleton />;
 
   const standings = bracketData.group_stage?.standings ?? {};
@@ -306,6 +225,7 @@ export default function GroupCards({ bracketData, fixturesData, isActual }) {
           teams={teams}
           standings={standings[groupName] ?? []}
           fixtures={fixtures}
+          actualData={actualData}
           isActual={isActual}
         />
       ))}

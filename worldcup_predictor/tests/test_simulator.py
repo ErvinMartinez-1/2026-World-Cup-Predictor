@@ -1,10 +1,3 @@
-"""
-test_simulator.py
-
-Tests the tournament simulator with both deterministic
-and Monte Carlo modes.
-"""
-
 import joblib
 import pandas as pd
 from pathlib import Path

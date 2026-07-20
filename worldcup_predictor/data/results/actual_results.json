@@ -1,0 +1,856 @@
+{
+  "generated_at": "2026-07-20T17:38:50Z",
+  "tournament": "2026 FIFA World Cup",
+  "complete": true,
+  "source": "English Wikipedia (raw wikitext): '2026 FIFA World Cup Group A'-'Group L' and '2026 FIFA World Cup knockout stage', retrieved 2026-07-20",
+  "final_standings": {
+    "champion": "Spain",
+    "runner_up": "Argentina",
+    "third": "England",
+    "fourth": "France"
+  },
+  "group_stage": {
+    "group_a_mexico_vs_south_africa": {
+      "home_team": "Mexico",
+      "away_team": "South Africa",
+      "home_goals": 2,
+      "away_goals": 0,
+      "date": "2026-06-11"
+    },
+    "group_a_mexico_vs_south_korea": {
+      "home_team": "Mexico",
+      "away_team": "South Korea",
+      "home_goals": 1,
+      "away_goals": 0,
+      "date": "2026-06-18"
+    },
+    "group_a_mexico_vs_czech_republic": {
+      "home_team": "Mexico",
+      "away_team": "Czech Republic",
+      "home_goals": 3,
+      "away_goals": 0,
+      "date": "2026-06-24"
+    },
+    "group_a_south_korea_vs_south_africa": {
+      "home_team": "South Korea",
+      "away_team": "South Africa",
+      "home_goals": 0,
+      "away_goals": 1,
+      "date": "2026-06-24"
+    },
+    "group_a_czech_republic_vs_south_africa": {
+      "home_team": "Czech Republic",
+      "away_team": "South Africa",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-18"
+    },
+    "group_a_south_korea_vs_czech_republic": {
+      "home_team": "South Korea",
+      "away_team": "Czech Republic",
+      "home_goals": 2,
+      "away_goals": 1,
+      "date": "2026-06-11"
+    },
+    "group_b_canada_vs_bosnia_and_herzegovina": {
+      "home_team": "Canada",
+      "away_team": "Bosnia and Herzegovina",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-12"
+    },
+    "group_b_canada_vs_qatar": {
+      "home_team": "Canada",
+      "away_team": "Qatar",
+      "home_goals": 6,
+      "away_goals": 0,
+      "date": "2026-06-18"
+    },
+    "group_b_switzerland_vs_canada": {
+      "home_team": "Switzerland",
+      "away_team": "Canada",
+      "home_goals": 2,
+      "away_goals": 1,
+      "date": "2026-06-24"
+    },
+    "group_b_bosnia_and_herzegovina_vs_qatar": {
+      "home_team": "Bosnia and Herzegovina",
+      "away_team": "Qatar",
+      "home_goals": 3,
+      "away_goals": 1,
+      "date": "2026-06-24"
+    },
+    "group_b_switzerland_vs_bosnia_and_herzegovina": {
+      "home_team": "Switzerland",
+      "away_team": "Bosnia and Herzegovina",
+      "home_goals": 4,
+      "away_goals": 1,
+      "date": "2026-06-18"
+    },
+    "group_b_switzerland_vs_qatar": {
+      "home_team": "Switzerland",
+      "away_team": "Qatar",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-13"
+    },
+    "group_c_brazil_vs_morocco": {
+      "home_team": "Brazil",
+      "away_team": "Morocco",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-13"
+    },
+    "group_c_brazil_vs_haiti": {
+      "home_team": "Brazil",
+      "away_team": "Haiti",
+      "home_goals": 3,
+      "away_goals": 0,
+      "date": "2026-06-19"
+    },
+    "group_c_brazil_vs_scotland": {
+      "home_team": "Brazil",
+      "away_team": "Scotland",
+      "home_goals": 3,
+      "away_goals": 0,
+      "date": "2026-06-24"
+    },
+    "group_c_morocco_vs_haiti": {
+      "home_team": "Morocco",
+      "away_team": "Haiti",
+      "home_goals": 4,
+      "away_goals": 2,
+      "date": "2026-06-24"
+    },
+    "group_c_morocco_vs_scotland": {
+      "home_team": "Morocco",
+      "away_team": "Scotland",
+      "home_goals": 1,
+      "away_goals": 0,
+      "date": "2026-06-19"
+    },
+    "group_c_haiti_vs_scotland": {
+      "home_team": "Haiti",
+      "away_team": "Scotland",
+      "home_goals": 0,
+      "away_goals": 1,
+      "date": "2026-06-13"
+    },
+    "group_d_paraguay_vs_united_states": {
+      "home_team": "Paraguay",
+      "away_team": "United States",
+      "home_goals": 1,
+      "away_goals": 4,
+      "date": "2026-06-12"
+    },
+    "group_d_australia_vs_united_states": {
+      "home_team": "Australia",
+      "away_team": "United States",
+      "home_goals": 0,
+      "away_goals": 2,
+      "date": "2026-06-19"
+    },
+    "group_d_turkey_vs_united_states": {
+      "home_team": "Turkey",
+      "away_team": "United States",
+      "home_goals": 3,
+      "away_goals": 2,
+      "date": "2026-06-25"
+    },
+    "group_d_paraguay_vs_australia": {
+      "home_team": "Paraguay",
+      "away_team": "Australia",
+      "home_goals": 0,
+      "away_goals": 0,
+      "date": "2026-06-25"
+    },
+    "group_d_turkey_vs_paraguay": {
+      "home_team": "Turkey",
+      "away_team": "Paraguay",
+      "home_goals": 0,
+      "away_goals": 1,
+      "date": "2026-06-19"
+    },
+    "group_d_turkey_vs_australia": {
+      "home_team": "Turkey",
+      "away_team": "Australia",
+      "home_goals": 0,
+      "away_goals": 2,
+      "date": "2026-06-13"
+    },
+    "group_e_germany_vs_curaçao": {
+      "home_team": "Germany",
+      "away_team": "Curaçao",
+      "home_goals": 7,
+      "away_goals": 1,
+      "date": "2026-06-14"
+    },
+    "group_e_germany_vs_ivory_coast": {
+      "home_team": "Germany",
+      "away_team": "Ivory Coast",
+      "home_goals": 2,
+      "away_goals": 1,
+      "date": "2026-06-20"
+    },
+    "group_e_ecuador_vs_germany": {
+      "home_team": "Ecuador",
+      "away_team": "Germany",
+      "home_goals": 2,
+      "away_goals": 1,
+      "date": "2026-06-25"
+    },
+    "group_e_ivory_coast_vs_curaçao": {
+      "home_team": "Ivory Coast",
+      "away_team": "Curaçao",
+      "home_goals": 2,
+      "away_goals": 0,
+      "date": "2026-06-25"
+    },
+    "group_e_ecuador_vs_curaçao": {
+      "home_team": "Ecuador",
+      "away_team": "Curaçao",
+      "home_goals": 0,
+      "away_goals": 0,
+      "date": "2026-06-20"
+    },
+    "group_e_ecuador_vs_ivory_coast": {
+      "home_team": "Ecuador",
+      "away_team": "Ivory Coast",
+      "home_goals": 0,
+      "away_goals": 1,
+      "date": "2026-06-14"
+    },
+    "group_f_netherlands_vs_japan": {
+      "home_team": "Netherlands",
+      "away_team": "Japan",
+      "home_goals": 2,
+      "away_goals": 2,
+      "date": "2026-06-14"
+    },
+    "group_f_netherlands_vs_tunisia": {
+      "home_team": "Netherlands",
+      "away_team": "Tunisia",
+      "home_goals": 3,
+      "away_goals": 1,
+      "date": "2026-06-25"
+    },
+    "group_f_netherlands_vs_sweden": {
+      "home_team": "Netherlands",
+      "away_team": "Sweden",
+      "home_goals": 5,
+      "away_goals": 1,
+      "date": "2026-06-20"
+    },
+    "group_f_japan_vs_tunisia": {
+      "home_team": "Japan",
+      "away_team": "Tunisia",
+      "home_goals": 4,
+      "away_goals": 0,
+      "date": "2026-06-20"
+    },
+    "group_f_japan_vs_sweden": {
+      "home_team": "Japan",
+      "away_team": "Sweden",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-25"
+    },
+    "group_f_sweden_vs_tunisia": {
+      "home_team": "Sweden",
+      "away_team": "Tunisia",
+      "home_goals": 5,
+      "away_goals": 1,
+      "date": "2026-06-14"
+    },
+    "group_g_belgium_vs_egypt": {
+      "home_team": "Belgium",
+      "away_team": "Egypt",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-15"
+    },
+    "group_g_belgium_vs_iran": {
+      "home_team": "Belgium",
+      "away_team": "Iran",
+      "home_goals": 0,
+      "away_goals": 0,
+      "date": "2026-06-21"
+    },
+    "group_g_belgium_vs_new_zealand": {
+      "home_team": "Belgium",
+      "away_team": "New Zealand",
+      "home_goals": 5,
+      "away_goals": 1,
+      "date": "2026-06-26"
+    },
+    "group_g_iran_vs_egypt": {
+      "home_team": "Iran",
+      "away_team": "Egypt",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-26"
+    },
+    "group_g_egypt_vs_new_zealand": {
+      "home_team": "Egypt",
+      "away_team": "New Zealand",
+      "home_goals": 3,
+      "away_goals": 1,
+      "date": "2026-06-21"
+    },
+    "group_g_iran_vs_new_zealand": {
+      "home_team": "Iran",
+      "away_team": "New Zealand",
+      "home_goals": 2,
+      "away_goals": 2,
+      "date": "2026-06-15"
+    },
+    "group_h_spain_vs_cape_verde": {
+      "home_team": "Spain",
+      "away_team": "Cape Verde",
+      "home_goals": 0,
+      "away_goals": 0,
+      "date": "2026-06-15"
+    },
+    "group_h_spain_vs_saudi_arabia": {
+      "home_team": "Spain",
+      "away_team": "Saudi Arabia",
+      "home_goals": 4,
+      "away_goals": 0,
+      "date": "2026-06-21"
+    },
+    "group_h_spain_vs_uruguay": {
+      "home_team": "Spain",
+      "away_team": "Uruguay",
+      "home_goals": 1,
+      "away_goals": 0,
+      "date": "2026-06-26"
+    },
+    "group_h_saudi_arabia_vs_cape_verde": {
+      "home_team": "Saudi Arabia",
+      "away_team": "Cape Verde",
+      "home_goals": 0,
+      "away_goals": 0,
+      "date": "2026-06-26"
+    },
+    "group_h_uruguay_vs_cape_verde": {
+      "home_team": "Uruguay",
+      "away_team": "Cape Verde",
+      "home_goals": 2,
+      "away_goals": 2,
+      "date": "2026-06-21"
+    },
+    "group_h_uruguay_vs_saudi_arabia": {
+      "home_team": "Uruguay",
+      "away_team": "Saudi Arabia",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-15"
+    },
+    "group_i_france_vs_senegal": {
+      "home_team": "France",
+      "away_team": "Senegal",
+      "home_goals": 3,
+      "away_goals": 1,
+      "date": "2026-06-16"
+    },
+    "group_i_france_vs_norway": {
+      "home_team": "France",
+      "away_team": "Norway",
+      "home_goals": 4,
+      "away_goals": 1,
+      "date": "2026-06-26"
+    },
+    "group_i_france_vs_iraq": {
+      "home_team": "France",
+      "away_team": "Iraq",
+      "home_goals": 3,
+      "away_goals": 0,
+      "date": "2026-06-22"
+    },
+    "group_i_norway_vs_senegal": {
+      "home_team": "Norway",
+      "away_team": "Senegal",
+      "home_goals": 3,
+      "away_goals": 2,
+      "date": "2026-06-22"
+    },
+    "group_i_senegal_vs_iraq": {
+      "home_team": "Senegal",
+      "away_team": "Iraq",
+      "home_goals": 5,
+      "away_goals": 0,
+      "date": "2026-06-26"
+    },
+    "group_i_norway_vs_iraq": {
+      "home_team": "Norway",
+      "away_team": "Iraq",
+      "home_goals": 4,
+      "away_goals": 1,
+      "date": "2026-06-16"
+    },
+    "group_j_argentina_vs_algeria": {
+      "home_team": "Argentina",
+      "away_team": "Algeria",
+      "home_goals": 3,
+      "away_goals": 0,
+      "date": "2026-06-16"
+    },
+    "group_j_argentina_vs_austria": {
+      "home_team": "Argentina",
+      "away_team": "Austria",
+      "home_goals": 2,
+      "away_goals": 0,
+      "date": "2026-06-22"
+    },
+    "group_j_argentina_vs_jordan": {
+      "home_team": "Argentina",
+      "away_team": "Jordan",
+      "home_goals": 3,
+      "away_goals": 1,
+      "date": "2026-06-27"
+    },
+    "group_j_austria_vs_algeria": {
+      "home_team": "Austria",
+      "away_team": "Algeria",
+      "home_goals": 3,
+      "away_goals": 3,
+      "date": "2026-06-27"
+    },
+    "group_j_algeria_vs_jordan": {
+      "home_team": "Algeria",
+      "away_team": "Jordan",
+      "home_goals": 2,
+      "away_goals": 1,
+      "date": "2026-06-22"
+    },
+    "group_j_austria_vs_jordan": {
+      "home_team": "Austria",
+      "away_team": "Jordan",
+      "home_goals": 3,
+      "away_goals": 1,
+      "date": "2026-06-16"
+    },
+    "group_k_portugal_vs_uzbekistan": {
+      "home_team": "Portugal",
+      "away_team": "Uzbekistan",
+      "home_goals": 5,
+      "away_goals": 0,
+      "date": "2026-06-23"
+    },
+    "group_k_portugal_vs_colombia": {
+      "home_team": "Portugal",
+      "away_team": "Colombia",
+      "home_goals": 0,
+      "away_goals": 0,
+      "date": "2026-06-27"
+    },
+    "group_k_portugal_vs_dr_congo": {
+      "home_team": "Portugal",
+      "away_team": "DR Congo",
+      "home_goals": 1,
+      "away_goals": 1,
+      "date": "2026-06-17"
+    },
+    "group_k_colombia_vs_uzbekistan": {
+      "home_team": "Colombia",
+      "away_team": "Uzbekistan",
+      "home_goals": 3,
+      "away_goals": 1,
+      "date": "2026-06-17"
+    },
+    "group_k_uzbekistan_vs_dr_congo": {
+      "home_team": "Uzbekistan",
+      "away_team": "DR Congo",
+      "home_goals": 1,
+      "away_goals": 3,
+      "date": "2026-06-27"
+    },
+    "group_k_colombia_vs_dr_congo": {
+      "home_team": "Colombia",
+      "away_team": "DR Congo",
+      "home_goals": 1,
+      "away_goals": 0,
+      "date": "2026-06-23"
+    },
+    "group_l_england_vs_croatia": {
+      "home_team": "England",
+      "away_team": "Croatia",
+      "home_goals": 4,
+      "away_goals": 2,
+      "date": "2026-06-17"
+    },
+    "group_l_england_vs_ghana": {
+      "home_team": "England",
+      "away_team": "Ghana",
+      "home_goals": 0,
+      "away_goals": 0,
+      "date": "2026-06-23"
+    },
+    "group_l_england_vs_panama": {
+      "home_team": "England",
+      "away_team": "Panama",
+      "home_goals": 2,
+      "away_goals": 0,
+      "date": "2026-06-27"
+    },
+    "group_l_croatia_vs_ghana": {
+      "home_team": "Croatia",
+      "away_team": "Ghana",
+      "home_goals": 2,
+      "away_goals": 1,
+      "date": "2026-06-27"
+    },
+    "group_l_croatia_vs_panama": {
+      "home_team": "Croatia",
+      "away_team": "Panama",
+      "home_goals": 1,
+      "away_goals": 0,
+      "date": "2026-06-23"
+    },
+    "group_l_panama_vs_ghana": {
+      "home_team": "Panama",
+      "away_team": "Ghana",
+      "home_goals": 0,
+      "away_goals": 1,
+      "date": "2026-06-17"
+    }
+  },
+  "knockout": {
+    "round_of_32": [
+      {
+        "id": "r32_1",
+        "date": "2026-06-29",
+        "home_team": "Germany",
+        "away_team": "Paraguay",
+        "home_goals": 1,
+        "away_goals": 1,
+        "winner": "Paraguay",
+        "method": "penalties",
+        "home_pens": 3,
+        "away_pens": 4
+      },
+      {
+        "id": "r32_2",
+        "date": "2026-06-30",
+        "home_team": "France",
+        "away_team": "Sweden",
+        "home_goals": 3,
+        "away_goals": 0,
+        "winner": "France",
+        "method": null
+      },
+      {
+        "id": "r32_3",
+        "date": "2026-06-28",
+        "home_team": "South Africa",
+        "away_team": "Canada",
+        "home_goals": 0,
+        "away_goals": 1,
+        "winner": "Canada",
+        "method": null
+      },
+      {
+        "id": "r32_4",
+        "date": "2026-06-29",
+        "home_team": "Netherlands",
+        "away_team": "Morocco",
+        "home_goals": 1,
+        "away_goals": 1,
+        "winner": "Morocco",
+        "method": "penalties",
+        "home_pens": 2,
+        "away_pens": 3
+      },
+      {
+        "id": "r32_5",
+        "date": "2026-07-02",
+        "home_team": "Portugal",
+        "away_team": "Croatia",
+        "home_goals": 2,
+        "away_goals": 1,
+        "winner": "Portugal",
+        "method": null
+      },
+      {
+        "id": "r32_6",
+        "date": "2026-07-02",
+        "home_team": "Spain",
+        "away_team": "Austria",
+        "home_goals": 3,
+        "away_goals": 0,
+        "winner": "Spain",
+        "method": null
+      },
+      {
+        "id": "r32_7",
+        "date": "2026-07-01",
+        "home_team": "United States",
+        "away_team": "Bosnia and Herzegovina",
+        "home_goals": 2,
+        "away_goals": 0,
+        "winner": "United States",
+        "method": null
+      },
+      {
+        "id": "r32_8",
+        "date": "2026-07-01",
+        "home_team": "Belgium",
+        "away_team": "Senegal",
+        "home_goals": 3,
+        "away_goals": 2,
+        "winner": "Belgium",
+        "method": "extra_time"
+      },
+      {
+        "id": "r32_9",
+        "date": "2026-06-29",
+        "home_team": "Brazil",
+        "away_team": "Japan",
+        "home_goals": 2,
+        "away_goals": 1,
+        "winner": "Brazil",
+        "method": null
+      },
+      {
+        "id": "r32_10",
+        "date": "2026-06-30",
+        "home_team": "Ivory Coast",
+        "away_team": "Norway",
+        "home_goals": 1,
+        "away_goals": 2,
+        "winner": "Norway",
+        "method": null
+      },
+      {
+        "id": "r32_11",
+        "date": "2026-06-30",
+        "home_team": "Mexico",
+        "away_team": "Ecuador",
+        "home_goals": 2,
+        "away_goals": 0,
+        "winner": "Mexico",
+        "method": null
+      },
+      {
+        "id": "r32_12",
+        "date": "2026-07-01",
+        "home_team": "England",
+        "away_team": "DR Congo",
+        "home_goals": 2,
+        "away_goals": 1,
+        "winner": "England",
+        "method": null
+      },
+      {
+        "id": "r32_13",
+        "date": "2026-07-03",
+        "home_team": "Argentina",
+        "away_team": "Cape Verde",
+        "home_goals": 3,
+        "away_goals": 2,
+        "winner": "Argentina",
+        "method": "extra_time"
+      },
+      {
+        "id": "r32_14",
+        "date": "2026-07-03",
+        "home_team": "Australia",
+        "away_team": "Egypt",
+        "home_goals": 1,
+        "away_goals": 1,
+        "winner": "Egypt",
+        "method": "penalties",
+        "home_pens": 2,
+        "away_pens": 4
+      },
+      {
+        "id": "r32_15",
+        "date": "2026-07-02",
+        "home_team": "Switzerland",
+        "away_team": "Algeria",
+        "home_goals": 2,
+        "away_goals": 0,
+        "winner": "Switzerland",
+        "method": null
+      },
+      {
+        "id": "r32_16",
+        "date": "2026-07-03",
+        "home_team": "Colombia",
+        "away_team": "Ghana",
+        "home_goals": 1,
+        "away_goals": 0,
+        "winner": "Colombia",
+        "method": null
+      }
+    ],
+    "round_of_16": [
+      {
+        "id": "r16_1",
+        "date": "2026-07-04",
+        "home_team": "Paraguay",
+        "away_team": "France",
+        "home_goals": 0,
+        "away_goals": 1,
+        "winner": "France",
+        "method": null
+      },
+      {
+        "id": "r16_2",
+        "date": "2026-07-04",
+        "home_team": "Canada",
+        "away_team": "Morocco",
+        "home_goals": 0,
+        "away_goals": 3,
+        "winner": "Morocco",
+        "method": null
+      },
+      {
+        "id": "r16_3",
+        "date": "2026-07-06",
+        "home_team": "Portugal",
+        "away_team": "Spain",
+        "home_goals": 0,
+        "away_goals": 1,
+        "winner": "Spain",
+        "method": null
+      },
+      {
+        "id": "r16_4",
+        "date": "2026-07-06",
+        "home_team": "United States",
+        "away_team": "Belgium",
+        "home_goals": 1,
+        "away_goals": 4,
+        "winner": "Belgium",
+        "method": null
+      },
+      {
+        "id": "r16_5",
+        "date": "2026-07-05",
+        "home_team": "Brazil",
+        "away_team": "Norway",
+        "home_goals": 1,
+        "away_goals": 2,
+        "winner": "Norway",
+        "method": null
+      },
+      {
+        "id": "r16_6",
+        "date": "2026-07-05",
+        "home_team": "Mexico",
+        "away_team": "England",
+        "home_goals": 2,
+        "away_goals": 3,
+        "winner": "England",
+        "method": null
+      },
+      {
+        "id": "r16_7",
+        "date": "2026-07-07",
+        "home_team": "Argentina",
+        "away_team": "Egypt",
+        "home_goals": 3,
+        "away_goals": 2,
+        "winner": "Argentina",
+        "method": null
+      },
+      {
+        "id": "r16_8",
+        "date": "2026-07-07",
+        "home_team": "Switzerland",
+        "away_team": "Colombia",
+        "home_goals": 0,
+        "away_goals": 0,
+        "winner": "Switzerland",
+        "method": "penalties",
+        "home_pens": 4,
+        "away_pens": 3
+      }
+    ],
+    "quarter_finals": [
+      {
+        "id": "qf_1",
+        "date": "2026-07-09",
+        "home_team": "France",
+        "away_team": "Morocco",
+        "home_goals": 2,
+        "away_goals": 0,
+        "winner": "France",
+        "method": null
+      },
+      {
+        "id": "qf_2",
+        "date": "2026-07-10",
+        "home_team": "Spain",
+        "away_team": "Belgium",
+        "home_goals": 2,
+        "away_goals": 1,
+        "winner": "Spain",
+        "method": null
+      },
+      {
+        "id": "qf_3",
+        "date": "2026-07-11",
+        "home_team": "Norway",
+        "away_team": "England",
+        "home_goals": 1,
+        "away_goals": 2,
+        "winner": "England",
+        "method": "extra_time"
+      },
+      {
+        "id": "qf_4",
+        "date": "2026-07-11",
+        "home_team": "Argentina",
+        "away_team": "Switzerland",
+        "home_goals": 3,
+        "away_goals": 1,
+        "winner": "Argentina",
+        "method": "extra_time"
+      }
+    ],
+    "semi_finals": [
+      {
+        "id": "sf_1",
+        "date": "2026-07-14",
+        "home_team": "France",
+        "away_team": "Spain",
+        "home_goals": 0,
+        "away_goals": 2,
+        "winner": "Spain",
+        "method": null
+      },
+      {
+        "id": "sf_2",
+        "date": "2026-07-15",
+        "home_team": "England",
+        "away_team": "Argentina",
+        "home_goals": 1,
+        "away_goals": 2,
+        "winner": "Argentina",
+        "method": null
+      }
+    ],
+    "final": {
+      "id": "final",
+      "date": "2026-07-19",
+      "home_team": "Spain",
+      "away_team": "Argentina",
+      "home_goals": 1,
+      "away_goals": 0,
+      "winner": "Spain",
+      "method": "extra_time"
+    }
+  },
+  "third_place": {
+    "id": "third_place",
+    "date": "2026-07-18",
+    "home_team": "France",
+    "away_team": "England",
+    "home_goals": 4,
+    "away_goals": 6,
+    "winner": "England",
+    "method": null
+  }
+}

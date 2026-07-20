@@ -1,8 +1,3 @@
-"""
-Run with:
-    uvicorn api.main:app --reload --port 8000
-"""
-
 import json
 import os
 from pathlib import Path
@@ -12,18 +7,17 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# Data lives at ../data/results when running from the repo, and at
-# ./data/results when bundled for Lambda (/var/task). Repo layout is checked
-# first so a leftover staged copy never shadows live data locally.
 _HERE = Path(__file__).parent
 _CANDIDATES = [_HERE.parent / "data" / "results", _HERE / "data" / "results"]
 DATA_DIR = next((p for p in _CANDIDATES if p.exists()), _CANDIDATES[0])
 RESULTS_PATH = DATA_DIR / "simulation_output.json"
 FIXTURES_PATH = DATA_DIR / "fixture_predictions.json"
+ACTUALS_PATH = DATA_DIR / "actual_results.json"
 
 cache: dict = {
     "simulation": None,
     "fixtures": None,
+    "actuals": None,
 }
 
 @asynccontextmanager
@@ -41,6 +35,13 @@ async def lifespan(app: FastAPI):
         print(f"[API] Loaded {len(cache['fixtures'])} fixture predictions from {FIXTURES_PATH}")
     else:
         print("[API] No cached fixtures found — run generate_fixture_predictions() to generate.")
+
+    if ACTUALS_PATH.exists():
+        with open(ACTUALS_PATH, encoding="utf-8") as f:
+            cache["actuals"] = json.load(f)
+        print(f"[API] Loaded actual results from {ACTUALS_PATH}")
+    else:
+        print("[API] No actual results found — real match results will show as pending.")
 
     yield
 
@@ -67,6 +68,7 @@ def get_status():
         "generated_at": sim.get("generated_at") if sim else None,
         "fixtures_loaded": cache["fixtures"] is not None,
         "n_fixtures": len(cache["fixtures"]) if cache["fixtures"] else 0,
+        "actuals_loaded": cache["actuals"] is not None,
     }
 
 @app.get("/api/bracket")
@@ -92,6 +94,20 @@ def get_fixtures(group: Optional[str] = None):
     if group:
         fixtures = [f for f in fixtures if f["group"] == group]
     return {"fixtures": fixtures}
+
+@app.get("/api/actual-results")
+def get_actual_results():
+    """
+    Real 2026 World Cup results — all 72 group fixtures plus the full knockout
+    bracket. group_stage is keyed by the same fixture IDs as /api/fixtures, with
+    goals oriented to each fixture's own home_team/away_team.
+    """
+    if cache["actuals"] is None:
+        raise HTTPException(
+            status_code=503,
+            detail="No actual results available.",
+        )
+    return cache["actuals"]
 
 @app.get("/api/fixtures/{fixture_id}")
 def get_fixture(fixture_id: str):

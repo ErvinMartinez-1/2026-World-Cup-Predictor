@@ -11,55 +11,6 @@ const ROUNDS = [
 const BRACKET_HEIGHT = 960;
 const MATCH_CARD_H   = 76;
 const COL_W          = 176;
-
-// ─── Actual Knockout Results ──────────────────────────────────────────────────
-// Fill in each match as it is played. Set home_team / away_team once the
-// advancing teams are known, then add home_goals / away_goals / winner / method
-// when the result is in. Leave fields as null until then.
-// method: null | "extra_time" | "penalties"
-const ACTUAL_KNOCKOUT = {
-  round_of_32: [
-    { id: "r32_1",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_2",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_3",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_4",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_5",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_6",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_7",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_8",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_9",  home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_10", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_11", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_12", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_13", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_14", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_15", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r32_16", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-  ],
-  round_of_16: [
-    { id: "r16_1", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r16_2", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r16_3", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r16_4", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r16_5", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r16_6", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r16_7", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "r16_8", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-  ],
-  quarter_finals: [
-    { id: "qf_1", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "qf_2", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "qf_3", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "qf_4", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-  ],
-  semi_finals: [
-    { id: "sf_1", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-    { id: "sf_2", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-  ],
-  final: { id: "final", home_team: null, away_team: null, home_goals: null, away_goals: null, winner: null, method: null },
-};
-// ─────────────────────────────────────────────────────────────────────────────
-
 function TeamRow({ team, isWinner, goals, isBottom }) {
   const code = team ? ISO_MAP[team] : null;
   const isBlank = !team;
@@ -186,24 +137,64 @@ function ChampionCard({ winner }) {
   );
 }
 
-function ActualChampionCard() {
+function ActualChampionCard({ winner }) {
+  if (!winner) {
+    return (
+      <div className="flex flex-col" style={{ width: 156, minWidth: 156 }}>
+        <div className="text-center text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200 w-full">
+          Champion
+        </div>
+        <div
+          className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 p-4 w-full"
+          style={{ height: BRACKET_HEIGHT }}
+        >
+          <div className="w-16 h-11 rounded bg-gray-200" />
+          <div className="text-gray-300 text-xs italic font-medium">TBD</div>
+        </div>
+      </div>
+    );
+  }
+
+  const code   = ISO_MAP[winner];
+  const colors = NATION_COLORS[winner] ?? { bg: "#1a3a5c", accent: "#FFD700" };
+
   return (
     <div className="flex flex-col" style={{ width: 156, minWidth: 156 }}>
       <div className="text-center text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3 pb-2 border-b border-gray-200 w-full">
         Champion
       </div>
       <div
-        className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 p-4 w-full"
-        style={{ height: BRACKET_HEIGHT }}
+        className="flex flex-col items-center justify-center gap-4 rounded-xl border-2 p-4 w-full"
+        style={{
+          height: BRACKET_HEIGHT,
+          background: `linear-gradient(160deg, ${colors.bg}ee 0%, ${colors.bg}bb 100%)`,
+          borderColor: colors.accent + "99",
+        }}
+        data-testid="actual-champion-card"
       >
-        <div className="w-16 h-11 rounded bg-gray-200" />
-        <div className="text-gray-300 text-xs italic font-medium">TBD</div>
+        {code && (
+          <img
+            src={flagSrc(code, 160)}
+            alt={winner}
+            style={{
+              width: 96, height: 64, objectFit: "cover",
+              borderRadius: 6,
+              boxShadow: "0 6px 24px rgba(0,0,0,0.45)",
+            }}
+          />
+        )}
+        <div className="font-bold text-sm text-center leading-tight px-1" style={{ color: colors.accent }}>
+          {winner}
+        </div>
+        <div className="text-[10px] uppercase tracking-widest text-center" style={{ color: colors.accent + "99" }}>
+          Champion
+        </div>
       </div>
     </div>
   );
 }
 
-export default function KnockoutBracket({ data, isActual }) {
+export default function KnockoutBracket({ data, actualData, isActual }) {
   if (!data) {
     return (
       <div className="flex gap-4 overflow-x-auto pb-4">
@@ -224,17 +215,21 @@ export default function KnockoutBracket({ data, isActual }) {
   }
 
   if (isActual) {
+    const actualKnockout = actualData?.knockout ?? {};
+    // Empty rounds still render their placeholder slots so the bracket keeps
+    // its shape before results land.
+    const SLOTS = { round_of_32: 16, round_of_16: 8, quarter_finals: 4, semi_finals: 2, final: 1 };
     return (
       <div className="overflow-x-auto pb-6" data-testid="knockout-bracket-actual">
         <div className="flex gap-3 w-fit mx-auto">
-          {ROUNDS.map(({ key, label }) => (
-            <RoundColumn
-              key={key}
-              label={label}
-              matches={asArray(ACTUAL_KNOCKOUT[key])}
-            />
-          ))}
-          <ActualChampionCard />
+          {ROUNDS.map(({ key, label }) => {
+            const played = asArray(actualKnockout[key]);
+            const matches = played.length
+              ? played
+              : Array.from({ length: SLOTS[key] }, () => null);
+            return <RoundColumn key={key} label={label} matches={matches} />;
+          })}
+          <ActualChampionCard winner={actualData?.final_standings?.champion ?? null} />
         </div>
       </div>
     );
